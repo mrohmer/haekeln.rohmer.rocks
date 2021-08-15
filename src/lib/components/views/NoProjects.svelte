@@ -12,7 +12,7 @@
 	}
 </style>
 <div class="no-project">
-	Noch wurde kein projekt erstellt.
+	Noch wurde kein Projekt erstellt.
 	<div class="no-project__btn">
 		<Button on:click>Neues Projekt erstellen</Button>
 	</div>
