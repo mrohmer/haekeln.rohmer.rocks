@@ -41,7 +41,6 @@
 <div class="modal">
 	<div class="modal__backdrop" on:click={handleCloseClick}></div>
 	<div class="modal__container">
-		<button on:click={handleCloseClick}>close</button>
 		<div class="modal__content">
 			<slot />
 		</div>

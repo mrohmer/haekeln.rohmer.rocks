@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { IStep } from '../../models/step';
 	import { createEventDispatcher } from 'svelte';
+	import Checkbox from '../elements/Checkbox.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -9,6 +10,8 @@
 	$: checkboxAmount = step?.checkboxAmount ?? 0;
 	$: text = step?.text;
 	$: state = step?.state ?? 0;
+
+	const randomId = (Math.random() * 1000).toFixed(2);
 
 	const handleCheckedChange = (index, target: HTMLInputElement) => {
 		const tmp = Math.min(Math.max(state + (target.checked ? 1 : -1), 0), checkboxAmount);
@@ -25,17 +28,29 @@
 
 		if (index >= state) {
 			target.checked = !target.checked;
-		} else if (index < state ) {
+		} else if (index < state) {
 			target.checked = !target.checked;
 		}
 	};
 
 </script>
+<style lang="scss">
+  .step-row {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 10px;
 
-<li>
+    &__checkbox, &__label {
+      vertical-align: middle;
+    }
+  }
+</style>
+
+<li class="step-row">
 	{#each { length: checkboxAmount } as _, i}
-		<input type="checkbox" id="checkbox_{(Math.random() * 1000).toFixed(2)}-{i}"
+		<Checkbox id="checkbox_{randomId}-{i}"
 					 checked={i < state}
 					 on:change={e => handleCheckedChange(i, e.target)} />
-	{/each} {text}
+	{/each}
+	<label class="step-row__label" for="checkbox_{randomId}-{checkboxAmount - 1}">{text}</label>
 </li>

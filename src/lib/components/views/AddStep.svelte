@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
+	import Button from '../elements/Button.svelte';
+	import Input from '../elements/Input.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -14,7 +16,7 @@
 
 		dispatch('save', {
 			checkboxAmount,
-			text,
+			text
 		});
 
 		checkboxAmount = 1;
@@ -23,18 +25,30 @@
 </script>
 
 <style lang="scss">
-	.add-step {
-		display: flex;
-		justify-content: space-between;
+  .add-step {
+    display: flex;
+    justify-content: space-between;
 
-		&__text {
-			flex-grow: 1;
+    &__text {
+      flex-grow: 1;
+    }
+		&__spacer {
+			width: 5px;
 		}
-	}
-</style>
 
+		:global(input) {
+			height: 100%;
+		}
+  }
+</style>
 <form class="add-step" on:submit={handleSubmit}>
-	<input type="number" bind:value={checkboxAmount} min="1">
-	<input type="text" class="add-step__text" bind:value={text}>
-	<button type="submit">add</button>
+	<div>
+		<Input type="number" bind:value={checkboxAmount} min="1" />
+	</div>
+	<div class="add-step__spacer"></div>
+	<div  class="add-step__text">
+		<Input type="text" bind:value={text} />
+	</div>
+	<div class="add-step__spacer"></div>
+	<Button type="submit" variant="icon">plus</Button>
 </form>

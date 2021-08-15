@@ -7,7 +7,9 @@
 <div class="bottom-sheet" transition:slide|local>
 	<div class="bottom-sheet__placeholder" style="height: {height}px"></div>
 	<div class="bottom-sheet__container" bind:clientHeight={height}>
-		<slot />
+		<div class="bottom-sheet__content">
+			<slot />
+		</div>
 	</div>
 </div>
 
@@ -23,6 +25,9 @@
       box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
       border-top-left-radius: 3px;
       border-top-right-radius: 3px;
+		}
+		&__content {
+			width: 100%;
       max-width: 1000px;
       margin: auto;
 		}

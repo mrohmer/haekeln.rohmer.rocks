@@ -2,6 +2,9 @@
 	import { createEventDispatcher } from 'svelte';
 	import type { IStep } from '../../models/step';
 	import { ballTemplate } from '../../templates';
+	import Input from '../elements/Input.svelte';
+	import Button from '../elements/Button.svelte';
+	import Checkbox from '../elements/Checkbox.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -19,13 +22,13 @@
 
 		switch (template) {
 			case 'ball':
-				steps = ballTemplate({amount});
+				steps = ballTemplate({ amount });
 				break;
 		}
 
 		dispatch('save', {
 			title,
-			steps,
+			steps
 		});
 
 		title = '';
@@ -34,29 +37,33 @@
 	};
 </script>
 
+<style lang="scss">
+	.form-item {
+		margin-bottom: 10px;
+	}
+</style>
+
 <div class="add-project">
 	<form on:submit={handleSubmit}>
-		<div>
+		<div class="form-item">
 			<label for="title">Titel</label>
-			<input type="text" id="title" bind:value={title} minlength="1"/>
+			<Input type="text" id="title" bind:value={title} minlength="1"/>
 		</div>
-		<div>
-			<label>Vorlage</label>
+		<div class="form-item">
+			<div>Vorlage</div>
 			<div>
-				<input type="checkbox" id="template-ball" checked={template === 'ball'} on:change={({target}) => template = target.checked ? 'ball' : null}>
+				<Checkbox id="template-ball" checked={template === 'ball'} on:change={({target}) => template = target.checked ? 'ball' : null} />
 				<label for="template-ball">Ball</label>
 			</div>
 		</div>
 
 		{#if template === 'ball'}
-			<div>
+			<div class="form-item">
 				<label for="ball-amount">Anzahl Runden</label>
-				<input type="number" id="ball-amount" bind:value={amount} min="3"/>
+				<Input type="number" id="ball-amount" bind:value={amount} min="3"/>
 			</div>
 		{/if}
 
-		<button type="submit">add</button>
+		<Button type="submit" variant="icon">plus</Button>
 	</form>
 </div>
-
-{template} {amount}
