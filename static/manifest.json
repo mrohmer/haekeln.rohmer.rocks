@@ -1,0 +1,28 @@
+{
+  "start_url": "/",
+  "display": "fullscreen",
+  "name": "Maschenzähler",
+  "scope": "/",
+  "lang": "de",
+  "description": "Digitaler Maschenzähler",
+  "theme_color": "#AA2F67",
+  "background_color": "#fbfbfb",
+  "icons": [
+    {
+      "src": "icons/icon_500.png",
+      "sizes": "500x500"
+    },
+    {
+      "src": "icons/icon_250.png",
+      "sizes": "250x250"
+    },
+    {
+      "src": "icons/icon_150.png",
+      "sizes": "150x150"
+    },
+    {
+      "src": "favicon.png",
+      "sizes": "50x50"
+    }
+  ]
+}
