@@ -6,11 +6,13 @@
 <style lang="scss">
 	@use 'src/styles/_variables' as var;
 	label {
-		width: 15px;
-		height: 15px;
+		width: 20px;
+		height: 20px;
 		border: 1px solid var.$primary;
 		border-radius: 3px;
-		margin-right: 5px;
+		margin: 3px;
+		display: inline-block;
+		vertical-align: middle;
 
 		&:before, &:after {
 			content: '';
@@ -21,12 +23,12 @@
 			transform-origin: center;
 		}
 		&:before {
-			left: 5px;
+			left: 4px;
 			top: 10px;
 			transform: rotate(45deg);
 		}
 		&:after {
-			left: 7px;
+			left: 6px;
 			top: 8px;
       transform: rotate(-45deg);
 		}
