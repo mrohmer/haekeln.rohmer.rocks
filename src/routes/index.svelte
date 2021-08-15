@@ -39,12 +39,12 @@
 			return tmp;
 		}
 	)
-	const handleAddProject = ({ title }) => {
+	const handleAddProject = ({ title, steps }) => {
 		if (!projects.includes(title)) {
 			data.set({
 				...(($data ?? {}) as Record<string, IProject>),
 				[title]: {
-					steps: []
+					steps
 				} as IProject
 			});
 		}
@@ -68,7 +68,9 @@
 		}
 
 		if (!lCurrentProjectKey || !(lCurrentProjectKey in lData)) {
-			return lData[Object.keys(lData)[0]];
+			const first = Object.keys(lData)[0];
+			currentProjectKey.set(first);
+			return lData[first];
 		}
 		return lData[lCurrentProjectKey];
 	};
