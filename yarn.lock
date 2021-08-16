@@ -95,6 +95,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@rohmer/svelte-base@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/@rohmer/svelte-base/-/svelte-base-1.0.0.tgz#5b072cc2147e9aadc16da12774d61d63fe673fb0"
+  integrity sha512-fFS22kNTiB2d337X8CVqYBF0QTVkUM6ftBDMWU8f/oBUwl+IKUOJf8erIJMOLPoCl/fISGJ4hIT/6oJh04X8IA==
+
 "@rollup/pluginutils@^4.1.1":
   version "4.1.1"
   resolved "https://registry.npmjs.org/@rollup/pluginutils/-/pluginutils-4.1.1.tgz#1d4da86dd4eded15656a57d933fda2b9a08d47ec"

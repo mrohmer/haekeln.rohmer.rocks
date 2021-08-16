@@ -3,7 +3,6 @@
 </script>
 
 <script lang="ts">
-	import BottomSheet from '$lib/components/elements/BottomSheet.svelte';
 	import { writable } from 'svelte/store';
 	import { writable as localStorageWritable } from '$lib/stores/local-storage';
 	import type { IProject, IProjects } from '$lib/models/project';
@@ -14,11 +13,16 @@
 	import Tabs from '$lib/components/elements/Tabs/Tabs.svelte';
 	import Tab from '$lib/components/elements/Tabs/Tab.svelte';
 	import Project from '../lib/components/views/Project.svelte';
-	import PoweredBy from '../lib/components/views/PoweredBy.svelte';
+	import { PoweredBy } from '@rohmer/svelte-base';
 	import Icon from '../lib/components/elements/Icon.svelte';
 
 	const data = localStorageWritable<IProjects>('maschenzaehler', {});
 	const currentProjectKey = writable<string | undefined>();
+
+	const name = 'Matthias Rohmer';
+	const url = 'https://matthias.rohmer.rocks';
+	const technologies = ['svelte', 'netlify'];
+	const sourceCodeUrl = 'https://github.com/mrohmer/haekeln.rohmer.rocks';
 
 	let addProjectsOpen = false;
 
@@ -127,6 +131,9 @@
   :global(body) {
     background-color: var.$background;
   }
+	:global(a) {
+		color: var.$primary;
+	}
 
 	.container {
 		width: 100%;
@@ -155,13 +162,13 @@
 								 on:reset={() => handleResetProject()}
 								 on:remove={() => handleRemoveProject()}
 				>
-					<PoweredBy />
+					<PoweredBy {name} {url} {technologies} {sourceCodeUrl} />
 				</Project>
 
 			{/if}
 		{:else}
 			<NoProjects on:click={() => addProjectsOpen = true} />
-			<PoweredBy />
+			<PoweredBy {name} {url} {technologies} {sourceCodeUrl} />
 		{/if}
 
 		{#if addProjectsOpen}
