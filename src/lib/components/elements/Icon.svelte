@@ -1,12 +1,26 @@
 <script lang="ts">
-	import '@fortawesome/fontawesome-free/js/all';
+	import type { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
-	let slotObj: HTMLSpanElement;
-
-	$: icon = slotObj?.textContent;
+	export let icon: IconDefinition;
+	$: viewBox = `0 0 ${icon?.icon[0] ?? 0} ${icon?.icon[1] ?? 0}`;
+	$: path = icon?.icon[4] ?? [];
 </script>
 
-<i class="fa fa-{icon}"></i>
+<style>
+    .icon {
+        width: 1em;
+        height: 1em;
+        overflow: visible;
+        display: inline-block;
+    }
+</style>
 
-<span style="display: none" bind:this={slotObj}><slot /></span>
-
+<svg
+	aria-hidden="true"
+	class="icon"
+	role="img"
+	xmlns="http://www.w3.org/2000/svg"
+	viewBox="{viewBox}"
+>
+	<path fill="currentColor" d="{path}" />
+</svg>

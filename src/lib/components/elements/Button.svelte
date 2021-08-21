@@ -2,7 +2,6 @@
 	import Icon from './Icon.svelte';
 
 	export let disabled = false;
-	export let variant: 'button' | 'icon' = 'button';
 	export let type = 'button';
 </script>
 
@@ -24,12 +23,6 @@
   }
 </style>
 
-<button on:click {disabled} class:button-icon={variant === 'icon'} {type}>
-	{#if variant === 'icon'}
-		<Icon>
-			<slot />
-		</Icon>
-	{:else}
-		<slot />
-	{/if}
+<button on:click {disabled} {type}>
+	<slot />
 </button>

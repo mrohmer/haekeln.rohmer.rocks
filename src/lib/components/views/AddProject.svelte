@@ -5,6 +5,8 @@
 	import Input from '../elements/Input.svelte';
 	import Button from '../elements/Button.svelte';
 	import Checkbox from '../elements/Checkbox.svelte';
+	import { faPlus } from '@fortawesome/free-solid-svg-icons';
+	import Icon from '../elements/Icon.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -83,6 +85,6 @@
 			</div>
 		{/if}
 
-		<Button type="submit" variant="icon">plus</Button>
+		<Button type="submit"><Icon icon="{faPlus}" /></Button>
 	</form>
 </div>

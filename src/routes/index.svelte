@@ -15,6 +15,7 @@
 	import Project from '../lib/components/views/Project.svelte';
 	import { PoweredBy } from '@rohmer/svelte-base';
 	import Icon from '../lib/components/elements/Icon.svelte';
+	import {faPlus} from '@fortawesome/free-solid-svg-icons/faPlus';
 
 	const data = localStorageWritable<IProjects>('maschenzaehler', {});
 	const currentProjectKey = writable<string | undefined>();
@@ -151,7 +152,7 @@
 					<Tab active={$currentProjectKey === p} on:click={() => currentProjectKey.set(p)}>{p}</Tab>
 				{/each}
 				<Tab on:click={() => addProjectsOpen = true} light={true}>
-					<Icon>plus</Icon>
+					<Icon icon="{faPlus}" />
 				</Tab>
 			</Tabs>
 

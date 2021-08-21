@@ -2,6 +2,8 @@
 	import { createEventDispatcher } from 'svelte';
 	import Button from '../elements/Button.svelte';
 	import Input from '../elements/Input.svelte';
+	import { faPlus } from '@fortawesome/free-solid-svg-icons';
+	import Icon from '../elements/Icon.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -50,5 +52,5 @@
 		<Input type="text" bind:value={text} />
 	</div>
 	<div class="add-step__spacer"></div>
-	<Button type="submit" variant="icon">plus</Button>
+	<Button type="submit"><Icon icon="{faPlus}"/></Button>
 </form>

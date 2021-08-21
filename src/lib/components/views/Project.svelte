@@ -7,6 +7,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import Button from '../elements/Button.svelte';
 	import Icon from '../elements/Icon.svelte';
+	import {faEllipsisV, faTimes} from '@fortawesome/free-solid-svg-icons';
 
 	export let project: IProject;
 	let showMenu = false;
@@ -64,8 +65,8 @@
 				<AddStep on:save={e => dispatch('addStep', e.detail)} />
 			</div>
 			<div class="bs__burger" on:click={() => showMenu = !showMenu} style="line-height: {bsAddStepHeight + 'px'}">
-				<div class:hidden={showMenu}><Icon>ellipsis-v</Icon></div>
-				<div class:hidden={!showMenu}><Icon>times</Icon></div>
+				<div class:hidden={showMenu}><Icon icon="{faEllipsisV}" /></div>
+				<div class:hidden={!showMenu}><Icon icon="{faTimes}" /></div>
 			</div>
 		</div>
 		{#if showMenu}
