@@ -15,7 +15,7 @@
 	import Project from '../lib/components/views/Project.svelte';
 	import { PoweredBy } from '@rohmer/svelte-base';
 	import Icon from '../lib/components/elements/Icon.svelte';
-	import {faPlus} from '@fortawesome/free-solid-svg-icons/faPlus';
+	import {faPlus} from '@fortawesome/free-solid-svg-icons/faPlus.js';
 
 	const data = localStorageWritable<IProjects>('maschenzaehler', {});
 	const currentProjectKey = writable<string | undefined>();

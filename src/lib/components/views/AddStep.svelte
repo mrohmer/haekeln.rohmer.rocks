@@ -2,7 +2,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import Button from '../elements/Button.svelte';
 	import Input from '../elements/Input.svelte';
-	import { faPlus } from '@fortawesome/free-solid-svg-icons';
+	import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus.js';
 	import Icon from '../elements/Icon.svelte';
 
 	const dispatch = createEventDispatcher();

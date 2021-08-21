@@ -7,7 +7,8 @@
 	import { createEventDispatcher } from 'svelte';
 	import Button from '../elements/Button.svelte';
 	import Icon from '../elements/Icon.svelte';
-	import {faEllipsisV, faTimes} from '@fortawesome/free-solid-svg-icons';
+	import {faEllipsisV} from '@fortawesome/free-solid-svg-icons/faEllipsisV.js';
+	import {faTimes} from '@fortawesome/free-solid-svg-icons/faTimes.js';
 
 	export let project: IProject;
 	let showMenu = false;
