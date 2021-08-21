@@ -1,8 +1,15 @@
-import { build, files, timestamp } from '$service-worker';
-import {precacheAndRoute} from 'workbox-precaching';
+import { build, files } from '$service-worker';
+import {registerRoute} from 'workbox-routing';
+import {NetworkFirst} from 'workbox-strategies';
 
-precacheAndRoute([
-	{url: '/', revision: String(timestamp) },
-	...build.map(url => ({url, revision: String(timestamp)})),
-	...files.map(url => ({url, revision: String(timestamp)})),
-]);
+const urls = [
+	'/',
+	...build,
+	...files,
+];
+registerRoute(
+	({url}) => urls.includes(url.pathname),
+	new NetworkFirst(),
+);
+
+skipWaiting();
