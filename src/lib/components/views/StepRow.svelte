@@ -36,7 +36,6 @@
 </script>
 <style lang="scss">
   .step-row {
-    list-style: none;
     padding: 0;
     margin: 0 0 10px;
 
@@ -46,11 +45,11 @@
   }
 </style>
 
-<li class="step-row">
+<div class="step-row">
 	{#each { length: checkboxAmount } as _, i}
 		<Checkbox id="checkbox_{randomId}-{i}"
 					 checked={i < state}
 					 on:change={e => handleCheckedChange(i, e.target)} />
 	{/each}
 	<label class="step-row__label" for="checkbox_{randomId}-{checkboxAmount - 1}">{text}</label>
-</li>
+</div>

@@ -100,6 +100,7 @@
 		}
 		return lData[lCurrentProjectKey];
 	};
+	const handleChangeOrder = ({steps}) => updateSteps(() => steps);
 
 	$: project = getCurrentProject($data, $currentProjectKey);
 	$: projects = $data ? Object.keys($data) : [];
@@ -162,6 +163,7 @@
 								 on:addStep={({detail}) => handleAddStep(detail)}
 								 on:reset={() => handleResetProject()}
 								 on:remove={() => handleRemoveProject()}
+								 on:changeOrder={({detail}) => handleChangeOrder(detail)}
 				>
 					<PoweredBy {name} {url} {technologies} {sourceCodeUrl} />
 				</Project>
