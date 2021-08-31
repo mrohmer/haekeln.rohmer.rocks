@@ -38,6 +38,11 @@
   .step-row {
     padding: 0;
     margin: 0 0 10px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 
     &__checkbox, &__label {
       vertical-align: middle;
