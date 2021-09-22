@@ -3,9 +3,9 @@
 	import { createEventDispatcher } from 'svelte';
 	import Checkbox from '../elements/Checkbox.svelte';
 	import Icon from '$lib/components/elements/Icon.svelte';
-	import { faChevronUp } from '@fortawesome/free-solid-svg-icons/faChevronUp';
-	import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown';
-	import { faGripLines } from '@fortawesome/free-solid-svg-icons/faGripLines';
+	import { faChevronUp } from '@fortawesome/free-solid-svg-icons/faChevronUp.js';
+	import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown.js';
+	import { faGripLines } from '@fortawesome/free-solid-svg-icons/faGripLines.js';
 	import Button from '$lib/components/elements/Button.svelte';
 
 	const dispatch = createEventDispatcher();
