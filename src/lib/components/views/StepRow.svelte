@@ -2,10 +2,19 @@
 	import type { IStep } from '../../models/step';
 	import { createEventDispatcher } from 'svelte';
 	import Checkbox from '../elements/Checkbox.svelte';
+	import Icon from '$lib/components/elements/Icon.svelte';
+	import { faChevronUp } from '@fortawesome/free-solid-svg-icons/faChevronUp';
+	import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown';
+	import { faGripLines } from '@fortawesome/free-solid-svg-icons/faGripLines';
+	import Button from '$lib/components/elements/Button.svelte';
 
 	const dispatch = createEventDispatcher();
 
 	export let step: IStep;
+	export let moveDrag = false;
+	export let moveArrows = false;
+	export let moveArrowUpDisabled = false;
+	export let moveArrowDownDisabled = false;
 
 	$: checkboxAmount = step?.checkboxAmount ?? 0;
 	$: text = step?.text;
@@ -43,18 +52,38 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+		display: flex;
+		align-items: center;
 
-    &__checkbox, &__label {
-      vertical-align: middle;
-    }
+		&__move-indicators {
+      margin-left: auto;
+			display: flex;
+		}
   }
 </style>
 
 <div class="step-row">
 	{#each { length: checkboxAmount } as _, i}
 		<Checkbox id="checkbox_{randomId}-{i}"
-					 checked={i < state}
-					 on:change={e => handleCheckedChange(i, e.target)} />
+							checked={i < state}
+							on:change={e => handleCheckedChange(i, e.target)} />
 	{/each}
 	<label class="step-row__label" for="checkbox_{randomId}-{checkboxAmount - 1}">{text}</label>
+	{#if moveDrag || moveArrows}
+		<div class="step-row__move-indicators">
+			{#if moveArrows}
+				<Button variant="plain" disabled={moveArrowUpDisabled} on:click={() => dispatch('move', {direction: 'up'})}>
+					<Icon icon={faChevronUp} />
+				</Button>
+				<Button variant="plain" disabled={moveArrowDownDisabled} on:click={() => dispatch('move', {direction: 'down'})}>
+					<Icon icon={faChevronDown} />
+				</Button>
+			{/if}
+			{#if moveDrag}
+				<Button variant="plain">
+					<Icon icon={faGripLines} />
+				</Button>
+			{/if}
+		</div>
+	{/if}
 </div>

@@ -10,6 +10,7 @@
 	import Icon from '../elements/Icon.svelte';
 	import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV.js';
 	import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes.js';
+	import MediaQuery from '$lib/components/elements/MediaQuery.svelte';
 
 	export let project: IProject;
 	let showMenu = false;
@@ -20,12 +21,7 @@
 
 	const dispatch = createEventDispatcher();
 
-	const handleDrop = (event, target) => {
-		hovering = undefined;
-		dragged = undefined;
-
-		event.dataTransfer.dropEffect = 'move';
-		const start = parseInt(event.dataTransfer.getData('text/plain'));
+	const updateSteps = (start: number, target: number) => {
 
 		if (start === target) {
 			return;
@@ -42,6 +38,24 @@
 		}
 		dispatch('changeOrder', { steps });
 	};
+	const handleMove = (start: number, {direction}: Record<'direction', 'up'|'down'>) => {
+		if (!['up', 'down'].includes(direction)) {
+			return;
+		}
+		const target = start + (direction === 'up' ? -1 : 1);
+
+		updateSteps(start, target);
+	};
+
+	const handleDrop = (event, target) => {
+		hovering = undefined;
+		dragged = undefined;
+
+		event.dataTransfer.dropEffect = 'move';
+		const start = parseInt(event.dataTransfer.getData('text/plain'));
+
+		updateSteps(start, target);
+	};
 
 	const handleDragStart = (event, i) => {
 		dragged = i;
@@ -55,6 +69,8 @@
 	};
 	const handleDragOver = () => false;
 	const handleDragEnter = (index) => hovering = index;
+
+	$: touch = 'ontouchstart' in document.body;
 </script>
 
 <style lang="scss">
@@ -123,9 +139,17 @@
 					on:dragleave|self={() => hovering = undefined}
 					class:is--hovered={hovering === index && dragged !== index}
 			>
-				<StepRow
-					{step}
-					on:change={e => dispatch('changeStep', {...e.detail, index})} />
+				<MediaQuery query="(max-width: 600px)" let:matches>
+					<StepRow
+						{step}
+						moveDrag={!(matches || touch)}
+						moveArrows={matches || touch}
+						moveArrowUpDisabled={index <= 0}
+						moveArrowDownDisabled={index >= project.steps.length - 1}
+						on:change={e => dispatch('changeStep', {...e.detail, index})}
+						on:move={({detail}) => handleMove(index, detail)}
+					/>
+				</MediaQuery>
 			</li>
 		{/each}
 	</ul>
