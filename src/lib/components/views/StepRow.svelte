@@ -6,6 +6,8 @@
 	import { faChevronUp } from '@fortawesome/free-solid-svg-icons/faChevronUp.js';
 	import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown.js';
 	import { faGripLines } from '@fortawesome/free-solid-svg-icons/faGripLines.js';
+	import { faPen } from '@fortawesome/free-solid-svg-icons/faPen.js';
+	import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes.js';
 	import Button from '$lib/components/elements/Button.svelte';
 
 	const dispatch = createEventDispatcher();
@@ -55,7 +57,7 @@
 		display: flex;
 		align-items: center;
 
-		&__move-indicators {
+		&__actions {
       margin-left: auto;
 			display: flex;
 		}
@@ -70,7 +72,7 @@
 	{/each}
 	<label class="step-row__label" for="checkbox_{randomId}-{checkboxAmount - 1}">{text}</label>
 	{#if moveDrag || moveArrows}
-		<div class="step-row__move-indicators">
+		<div class="step-row__actions">
 			{#if moveArrows}
 				<Button variant="plain" disabled={moveArrowUpDisabled} on:click={() => dispatch('move', {direction: 'up'})}>
 					<Icon icon={faChevronUp} />
@@ -79,6 +81,12 @@
 					<Icon icon={faChevronDown} />
 				</Button>
 			{/if}
+			<Button variant="plain" on:click={() => dispatch('edit')}>
+				<Icon icon={faPen} />
+			</Button>
+			<Button variant="plain" on:click={() => dispatch('remove')}>
+				<Icon icon={faTimes} />
+			</Button>
 			{#if moveDrag}
 				<Button variant="plain">
 					<Icon icon={faGripLines} />

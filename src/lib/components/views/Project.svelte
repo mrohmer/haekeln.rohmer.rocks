@@ -11,6 +11,9 @@
 	import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV.js';
 	import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes.js';
 	import MediaQuery from '$lib/components/elements/MediaQuery.svelte';
+	import type { IStep } from '$lib/models/step';
+	import Modal from '$lib/components/elements/Modal.svelte';
+	import EditStep from '$lib/components/views/EditStep.svelte';
 
 	export let project: IProject;
 	let showMenu = false;
@@ -18,11 +21,11 @@
 
 	let hovering: number;
 	let dragged: number;
+	let editStep: number = null;
 
 	const dispatch = createEventDispatcher();
 
-	const updateSteps = (start: number, target: number) => {
-
+	const moveStep = (start: number, target: number) => {
 		if (start === target) {
 			return;
 		}
@@ -44,7 +47,7 @@
 		}
 		const target = start + (direction === 'up' ? -1 : 1);
 
-		updateSteps(start, target);
+		moveStep(start, target);
 	};
 
 	const handleDrop = (event, target) => {
@@ -54,7 +57,7 @@
 		event.dataTransfer.dropEffect = 'move';
 		const start = parseInt(event.dataTransfer.getData('text/plain'));
 
-		updateSteps(start, target);
+		moveStep(start, target);
 	};
 
 	const handleDragStart = (event, i) => {
@@ -69,6 +72,11 @@
 	};
 	const handleDragOver = () => false;
 	const handleDragEnter = (index) => hovering = index;
+
+	const handleEditStep = (index: number, step: Partial<IStep>) => {
+		dispatch('editStep', {index, step});
+		editStep = null;
+	}
 
 	$: touch = 'ontouchstart' in document.body;
 </script>
@@ -147,6 +155,8 @@
 						moveArrowUpDisabled={index <= 0}
 						moveArrowDownDisabled={index >= project.steps.length - 1}
 						on:change={e => dispatch('changeStep', {...e.detail, index})}
+						on:edit={e => editStep = index}
+						on:remove={e => dispatch('removeStep', { index })}
 						on:move={({detail}) => handleMove(index, detail)}
 					/>
 				</MediaQuery>
@@ -155,6 +165,15 @@
 	</ul>
 
 	<slot />
+
+	{#if editStep !== null}
+		<Modal>
+			<EditStep step={project.steps[editStep]}
+								on:save={({detail}) => handleEditStep(editStep, detail)}
+								on:cancel={({detail}) => editStep = null}
+			/>
+		</Modal>
+	{/if}
 
 	<BottomSheet>
 		<div class="bs">

@@ -31,7 +31,7 @@
 		...(($data ?? {}) as Record<string, IProject>),
 		[$currentProjectKey]: {
 			...($data[$currentProjectKey] ?? {}),
-			steps: cb($data[$currentProjectKey]?.steps)
+			steps: cb([...$data[$currentProjectKey]?.steps])
 		}
 	});
 
@@ -67,6 +67,28 @@
 				state: 0
 			}
 		]);
+	const handleRemoveStep = ({ index }: Record<'index', number>) =>
+		updateSteps(steps => {
+			const step = steps[index];
+			const confirmation = confirm(`Wolltest du wirklich '${step.text}' löschen?`);
+			if (confirmation) {
+				steps.splice(index, 1);
+			}
+			return steps;
+		});
+	const handleEditStep = ({ index, step }: Record<'index', number> & Record<'step', Partial<any>>) =>
+		updateSteps(steps => {
+			const original = steps[index];
+			const changed = ['checkboxAmount', 'text'].some(key => original[key] !== step[key]);
+			if (changed) {
+				steps[index] = {
+					...original,
+					checkboxAmount: step.checkboxAmount ?? original.checkboxAmount,
+					text: step.text ?? original.text,
+				};
+			}
+			return steps;
+		});
 	const handleResetProject = () => updateSteps(
 		steps => steps
 			.map(step => ({
@@ -161,6 +183,8 @@
 				<Project project={project}
 								 on:changeStep={({detail}) => handleChange(detail)}
 								 on:addStep={({detail}) => handleAddStep(detail)}
+								 on:editStep={({detail}) => handleEditStep(detail)}
+								 on:removeStep={({detail}) => handleRemoveStep(detail)}
 								 on:reset={() => handleResetProject()}
 								 on:remove={() => handleRemoveProject()}
 								 on:changeOrder={({detail}) => handleChangeOrder(detail)}
