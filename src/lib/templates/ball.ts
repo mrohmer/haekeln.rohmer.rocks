@@ -6,7 +6,7 @@ export const ballTemplate: StepsGeneratorFn = ({amount}) => {
 	const fmDecreaseSteps = [];
 	for (let i = 1; i < amount; i++) {
 		fmIncreaseSteps.push(createStep(`${i} fM, verdoppeln (${(i + 2) * 6})`));
-		fmDecreaseSteps.push(createStep(`${i} fM, Abnahme (${(i + 2) * 6})`));
+		fmDecreaseSteps.push(createStep(`${i} fM, Abnahme (${(i + 1) * 6})`));
 	}
 
 	return [
@@ -15,7 +15,7 @@ export const ballTemplate: StepsGeneratorFn = ({amount}) => {
 		...fmIncreaseSteps,
 		createStep('Runde', amount + 1),
 		...fmDecreaseSteps.reverse(),
-		createStep(`Abnahme (12)`),
-		createStep(`Vernähen (6)`),
+		createStep(`Abnahme (6)`),
+		createStep(`Vernähen`),
 	]
 }
