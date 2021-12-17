@@ -1,7 +1,12 @@
 import type { StepsGeneratorFn } from '$lib/models/generator';
 import { createStep } from '$lib/templates/utils';
+import type { IStep } from '$lib/models/step';
 
-export const ballTemplate: StepsGeneratorFn = ({amount}) => {
+export interface StepsGeneratorArgs {
+	amount: number;
+}
+
+export const ballTemplate: StepsGeneratorFn<StepsGeneratorArgs> = ({amount}: StepsGeneratorArgs) => {
 	const fmIncreaseSteps = [];
 	const fmDecreaseSteps = [];
 	for (let i = 1; i < amount; i++) {
@@ -17,5 +22,5 @@ export const ballTemplate: StepsGeneratorFn = ({amount}) => {
 		...fmDecreaseSteps.reverse(),
 		createStep(`Abnahme (6)`),
 		createStep(`Vernähen`),
-	]
+	] as IStep[]
 }

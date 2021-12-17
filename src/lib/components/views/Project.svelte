@@ -77,6 +77,10 @@
 		dispatch('editStep', {index, step});
 		editStep = null;
 	}
+	const handleSaveAsTemplate = () => {
+		showMenu = false;
+		dispatch('saveAsTemplate');
+	}
 
 	$: touch = 'ontouchstart' in document.body;
 </script>
@@ -116,13 +120,15 @@
   }
 
   .bs-menu {
-    margin-top: 10px;
-    display: flex;
-    justify-content: space-between;
+		&__row {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
 
-    :global(button) {
-      width: 100%;
-    }
+      :global(button) {
+        width: 100%;
+      }
+		}
 
     &__spacer {
       width: 10px;
@@ -191,9 +197,14 @@
 		</div>
 		{#if showMenu}
 			<div class="bs-menu" transition:slide|local>
-				<Button on:click={() => dispatch('remove')}>Projekt entfernen</Button>
-				<div class="bs-menu__spacer"></div>
-				<Button on:click={() => dispatch('reset')}>Projekt zurücksetzen</Button>
+				<div class="bs-menu__row">
+					<Button disabled={!project.steps.length} on:click={handleSaveAsTemplate}>Projekt als Template speichern</Button>
+				</div>
+				<div class="bs-menu__row">
+					<Button on:click={() => dispatch('remove')}>Projekt entfernen</Button>
+					<div class="bs-menu__spacer"></div>
+					<Button on:click={() => dispatch('reset')}>Projekt zurücksetzen</Button>
+				</div>
 			</div>
 		{/if}
 

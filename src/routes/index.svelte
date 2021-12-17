@@ -16,16 +16,21 @@
 	import { PoweredBy } from '@rohmer/svelte-base';
 	import Icon from '../lib/components/elements/Icon.svelte';
 	import {faPlus} from '@fortawesome/free-solid-svg-icons/faPlus.js';
+	import SaveProjectAsTemplate from '$lib/components/views/SaveProjectAsTemplate.svelte';
+	import type { ITemplates } from '$lib/models/template';
+	import { omitKeyInArray } from '$lib/utils/omit-key';
 
 	const data = localStorageWritable<IProjects>('maschenzaehler', {});
 	const currentProjectKey = writable<string | undefined>();
+
+	const templates = localStorageWritable<ITemplates>('templates', {});
 
 	const name = 'Matthias Rohmer';
 	const url = 'https://matthias.rohmer.rocks';
 	const technologies = ['svelte', 'netlify'];
 	const sourceCodeUrl = 'https://github.com/mrohmer/haekeln.rohmer.rocks';
 
-	let addProjectsOpen = false;
+	let openModal: 'addProject'|'saveAsTemplate' = undefined;
 
 	const updateSteps = (cb: (steps: IStep[]) => IStep[]) => data.set({
 		...(($data ?? {}) as Record<string, IProject>),
@@ -50,13 +55,14 @@
 			data.set({
 				...(($data ?? {}) as Record<string, IProject>),
 				[title]: {
+					title,
 					steps
 				} as IProject
 			});
 		}
 
 		currentProjectKey.set(title);
-		addProjectsOpen = false;
+		openModal = undefined;
 	};
 	const handleAddStep = ({ checkboxAmount, text }: Partial<IStep>) =>
 		updateSteps(steps => [
@@ -123,9 +129,22 @@
 		return lData[lCurrentProjectKey];
 	};
 	const handleChangeOrder = ({steps}) => updateSteps(() => steps);
+	const handleSaveProjectAsTemplate = ({title}) => {
+		const tmp: ITemplates = {
+			...$templates,
+			[`custom-${title}`]: {
+				title,
+				steps: omitKeyInArray(project.steps, 'state'),
+			}
+		};
+
+		templates.set(tmp);
+		openModal = undefined;
+	};
 
 	$: project = getCurrentProject($data, $currentProjectKey);
 	$: projects = $data ? Object.keys($data) : [];
+	$: title = project?.title ?? $currentProjectKey;
 </script>
 
 <svelte:head>
@@ -174,7 +193,7 @@
 				{#each projects as p}
 					<Tab active={$currentProjectKey === p} on:click={() => currentProjectKey.set(p)}>{p}</Tab>
 				{/each}
-				<Tab on:click={() => addProjectsOpen = true} light={true}>
+				<Tab on:click={() => openModal = 'addProject'} light={true}>
 					<Icon icon="{faPlus}" />
 				</Tab>
 			</Tabs>
@@ -188,19 +207,25 @@
 								 on:reset={() => handleResetProject()}
 								 on:remove={() => handleRemoveProject()}
 								 on:changeOrder={({detail}) => handleChangeOrder(detail)}
+								 on:saveAsTemplate={() => openModal = 'saveAsTemplate'}
 				>
 					<PoweredBy {name} {url} {technologies} {sourceCodeUrl} />
 				</Project>
 
 			{/if}
 		{:else}
-			<NoProjects on:click={() => addProjectsOpen = true} />
+			<NoProjects on:click={() => openModal = 'addProject'} />
 			<PoweredBy {name} {url} {technologies} {sourceCodeUrl} />
 		{/if}
 
-		{#if addProjectsOpen}
-			<Modal on:close={() => addProjectsOpen = false}>
-				<AddProject on:save={e => handleAddProject(e.detail)} />
+		{#if openModal === 'addProject'}
+			<Modal on:close={() => openModal = undefined}>
+				<AddProject customTemplates={$templates} on:save={e => handleAddProject(e.detail)} />
+			</Modal>
+		{/if}
+		{#if openModal === 'saveAsTemplate'}
+			<Modal on:close={() => openModal = undefined}>
+				<SaveProjectAsTemplate templates={$templates} {title} on:save={({detail}) => handleSaveProjectAsTemplate(detail)} />
 			</Modal>
 		{/if}
 	</div>

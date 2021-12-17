@@ -1,18 +1,20 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import type { IStep } from '../../models/step';
-	import { ballTemplate } from '../../templates';
+	import type { IStep } from '$lib/models/step';
+	import { ballTemplate, customTemplate } from '$lib/templates';
 	import Input from '../elements/Input.svelte';
 	import Button from '../elements/Button.svelte';
 	import Checkbox from '../elements/Checkbox.svelte';
 	import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus.js';
 	import Icon from '../elements/Icon.svelte';
+	import type { ITemplates } from '$lib/models/template';
 
 	const dispatch = createEventDispatcher();
 
 	export let title = '';
 	export let template = 'ball';
 	export let amount = 3;
+	export let customTemplates: ITemplates;
 
 	let submited = false;
 
@@ -25,10 +27,10 @@
 
 		let steps: IStep[] = [];
 
-		switch (template) {
-			case 'ball':
-				steps = ballTemplate({ amount });
-				break;
+		if (template === 'ball') {
+			steps = ballTemplate({ amount });
+		} else if (template in customTemplates) {
+			steps = customTemplate(customTemplates[template]);
 		}
 
 		dispatch('save', {
@@ -71,6 +73,17 @@
 									on:change={({target}) => template = target.checked ? 'ball' : null} />
 				<label for="template-ball">Ball</label>
 			</div>
+			{#if customTemplates}
+				{#each Object.entries(customTemplates) as [key, value]}
+					{#if value}
+						<div>
+							<Checkbox id="template-{key}" checked={template === key}
+												on:change={({target}) => template = target.checked ? key : null} />
+							<label for="template-{customTemplate}">{value && value.title}</label>
+						</div>
+					{/if}
+				{/each}
+			{/if}
 		</div>
 
 		{#if template === 'ball'}
