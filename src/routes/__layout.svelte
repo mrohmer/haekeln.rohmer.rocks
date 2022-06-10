@@ -1,5 +1,5 @@
 <script lang="ts">
-	import "../app.css";
+	import '../app.css';
 </script>
 
 <svelte:head>
@@ -13,4 +13,6 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 </svelte:head>
 
-<slot />
+<div class="w-full max-w-5xl mx-auto px-5">
+	<slot />
+</div>
