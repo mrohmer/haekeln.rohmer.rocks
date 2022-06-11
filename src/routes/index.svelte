@@ -10,15 +10,28 @@
 	import { onMount } from 'svelte';
 	import type { Projects } from '$lib/models/project';
 	import { tap } from '$lib/utils/tap';
+	import { migrateFromLocalStorage } from '$lib/db/migrate-from-local-storage';
 
 	let projects: Observable<Projects>;
 	let loading = true;
+
+	const migrate = async () => {
+		const localStorageValue = JSON.parse(localStorage.getItem('maschenzaehler') ?? '');
+		if (localStorageValue) {
+			await db.transaction('rw', db.projects, db.projectParts, db.rounds, () => migrateFromLocalStorage(localStorageValue));
+
+			localStorage.removeItem('maschenzaehler');
+			localStorage.setItem('_maschenzaehler', JSON.stringify(localStorageValue));
+		}
+	}
 
 	onMount(() => {
 		projects = liveQuery(
 			() => db.projects.toArray()
 				.then(tap<Projects>(() => (loading = false)))
 		);
+
+		migrate();
 	});
 </script>
 
