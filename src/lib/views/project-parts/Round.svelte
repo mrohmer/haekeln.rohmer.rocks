@@ -14,6 +14,7 @@
 	import { debounceTime } from '$lib/utils/debounce-time';
 	import { setCursorPosition } from '$lib/utils/set-cursor';
 	import CheckboxButton from '$lib/components/CheckboxButton.svelte';
+	import {fade} from 'svelte/transition'
 
 	const dispatch = createEventDispatcher();
 
@@ -89,19 +90,25 @@
 		<button on:click={() => !isFirst && dispatch('up')}
 						class="px-1 mr-px opacity-60 hover:opacity-100 transition-opacity"
 						class:disabled={isFirst || !round}
-						disabled={!round}>
+						disabled={!round}
+						transition:fade|local
+		>
 			<Icon icon={upIcon} />
 		</button>
 		<button on:click={() => !isLast && dispatch('down')}
 						class="px-1 mr-px opacity-60 hover:opacity-100 transition-opacity"
 						class:disabled={isLast || !round}
-						disabled={!round}>
+						disabled={!round}
+						transition:fade|local
+		>
 			<Icon icon={downIcon} />
 		</button>
 		<button on:click={() => dispatch('remove')}
 						class="px-1 mr-px opacity-60 hover:opacity-100 transition-opacity"
 						class:disabled={!round}
-						disabled={!round}>
+						disabled={!round}
+						transition:fade|local
+		>
 			<Icon icon={removeIcon} />
 		</button>
 	{/if}
