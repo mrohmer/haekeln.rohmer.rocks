@@ -156,10 +156,10 @@
 			Name
 		</Input>
 		<div class="sm:flex">
-			<Button href="./{$part.id}/duplicate">duplicate</Button>
-			<Button on:click={confirmAction(`Do you really want to reset ${$part.name}?`, handleResetClick)}>reset</Button>
+			<Button href="./{$part.id}/duplicate">duplicate part</Button>
+			<Button on:click={confirmAction(`Do you really want to reset ${$part.name}?`, handleResetClick)}>reset part</Button>
 			<Button on:click={confirmAction(`Do you really want to delete ${$part.name}?`, handleRemoveClick)}>
-				remove
+				remove part
 			</Button>
 		</div>
 	</div>
