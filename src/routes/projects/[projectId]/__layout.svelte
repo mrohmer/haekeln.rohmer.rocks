@@ -7,7 +7,8 @@
 	import { page } from '$app/stores';
 	import { tap } from '$lib/utils/tap';
 	import type { ProjectParts } from '$lib/models/project-part';
-	import { faChevronLeft as homeIcon, faPlus as addIcon } from '@fortawesome/free-solid-svg-icons';
+	import { faChevronLeft as homeIcon } from '@fortawesome/free-solid-svg-icons/faChevronLeft.js';
+	import { faPlus as addIcon } from '@fortawesome/free-solid-svg-icons/faPlus.js';
 	import Icon from '$lib/components/Icon.svelte';
 
 	let loading = true;

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.css';
-	import { PoweredBy } from '@rohmer/svelte-base';
+	import PoweredBy from '@rohmer/svelte-base/PoweredBy.svelte';
 </script>
 
 <svelte:head>

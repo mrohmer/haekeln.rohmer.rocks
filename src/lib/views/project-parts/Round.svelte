@@ -2,19 +2,15 @@
 	import type { Round } from '$lib/models/round';
 	import { db } from '$lib/db';
 	import Checkbox from '$lib/components/Checkbox.svelte';
-	import {
-		faTrash as removeIcon,
-		faChevronUp as upIcon,
-		faChevronDown as downIcon,
-		faPen as editIcon,
-		faTimes as endEditIcon
-	} from '@fortawesome/free-solid-svg-icons';
+	import { faTrash as removeIcon } from '@fortawesome/free-solid-svg-icons/faTrash.js';
+	import { faChevronUp as upIcon } from '@fortawesome/free-solid-svg-icons/faChevronUp.js';
+	import { faChevronDown as downIcon } from '@fortawesome/free-solid-svg-icons/faChevronDown.js';
 	import Icon from '$lib/components/Icon.svelte';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { debounceTime } from '$lib/utils/debounce-time';
 	import { setCursorPosition } from '$lib/utils/set-cursor';
 	import CheckboxButton from '$lib/components/CheckboxButton.svelte';
-	import {fade} from 'svelte/transition'
+	import { fade } from 'svelte/transition';
 
 	const dispatch = createEventDispatcher();
 
