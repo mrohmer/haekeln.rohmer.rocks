@@ -27,13 +27,13 @@
 {:else if $projects?.length}
 	<div class="flex h-screen flex-col text-center justify-center max-w-sm mx-auto py-9">
 		{#each $projects as project (project.id)}
-			<div class="p-4 border-b border-gray-200 dark:border-gray-700">
-				<a href="/projects/{project.id}">{project.name}</a>
-			</div>
+				<a href="/projects/{project.id}"
+					 class="p-4 border-b border-gray-200 dark:border-gray-700"
+				>
+					{project.name}
+				</a>
 		{/each}
-		<div class="p-4">
-			<a href="/projects/add">add project</a>
-		</div>
+		<a href="/projects/add" class="p-4 opacity-30 hover:opacity-100 transition-opacity">add project</a>
 	</div>
 {:else }
 	<EmptyProjects />
