@@ -1,10 +1,8 @@
-import { adjectives, animals, colors, names, starWars, uniqueNamesGenerator } from 'unique-names-generator';
+import { adjectives, animals, colors, uniqueNamesGenerator } from 'unique-names-generator';
 
 const adjectivesDictionary = [adjectives, colors].flat();
-const namesDictionary = [animals, starWars, names].flat();
 export const generateName = (): string => uniqueNamesGenerator({
-	dictionaries: [adjectivesDictionary, namesDictionary],
+	dictionaries: [adjectivesDictionary, animals],
 	separator: ' ',
-
 	length: 2,
 })

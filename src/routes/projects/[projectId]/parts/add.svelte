@@ -9,6 +9,11 @@
 	import { page } from '$app/stores';
 	import type { Round } from '$lib/models/round';
 	import { ballTemplate } from '$lib/templates';
+	import { onMount } from 'svelte';
+	import { generateName } from '$lib/utils/generate-name';
+	import type { ProjectPart } from '$lib/models/project-part';
+
+	let part: Pick<ProjectPart, 'name'>;
 
 	const handleSubmit = async ({ detail: { part, template } }) => {
 		const id = await db.transaction('rw', db.projectParts, db.rounds, async () => {
@@ -30,6 +35,12 @@
 
 		await goto(`/projects/${$page.params.projectId}/parts/${id}`);
 	};
+
+	onMount(() => {
+		part = {
+			name: generateName(),
+		};
+	})
 </script>
 
-<EditProjectPart on:submit={handleSubmit} />
+<EditProjectPart {part} on:submit={handleSubmit} />

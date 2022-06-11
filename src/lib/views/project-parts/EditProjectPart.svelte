@@ -20,6 +20,7 @@
 	let templateArgs = {};
 
 	let submitted = false;
+	let nameInputEl: HTMLInputElement;
 
 	const forbiddenNames = ['add', 'duplicate'];
 
@@ -41,10 +42,12 @@
 		});
 	};
 
+	$: nameInputEl?.focus();
+
 </script>
 
 <form on:submit|preventDefault={handleSubmit}>
-	<Input id="name" bind:value={part.name}>
+	<Input bind:this={nameInputEl} id="name" bind:value={part.name}>
 		Name
 		<div slot="error">
 			{#if submitted }

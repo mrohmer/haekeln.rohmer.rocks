@@ -7,6 +7,10 @@
 	export let max;
 	export let required;
 
+	let inputEl: HTMLInputElement;
+
+	export const focus = (...args) => inputEl?.focus(...args);
+
 	let klass: string
 	export {klass as class};
 </script>
@@ -15,9 +19,9 @@
 		<slot />
 	</label>
 	{#if type === 'text'}
-		<input type="text" {name} {id} {min} {max} {required} class="flex-1 h-10 leading-10 text-left" bind:value on:change on:input />
+		<input bind:this={inputEl} type="text" {name} {id} {min} {max} {required} class="flex-1 h-10 leading-10 text-left" bind:value on:change on:input />
 	{:else if type === 'number'}
-		<input type="number" {name} {id} {min} {max} {required} class="flex-1 h-10 leading-10 text-left" bind:value on:change on:input />
+		<input bind:this={inputEl} type="number" {name} {id} {min} {max} {required} class="flex-1 h-10 leading-10 text-left" bind:value on:change on:input />
 	{/if}
 		</div>
 <slot name="error" />

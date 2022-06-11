@@ -13,6 +13,7 @@
 	export let buttonText = 'add';
 
 	let submitted = false;
+	let nameInputEl: HTMLInputElement;
 
 	const forbiddenNames = ['add', 'duplicate'];
 
@@ -28,10 +29,12 @@
 		});
 	};
 
+	$: nameInputEl?.focus();
+
 </script>
 
 <form on:submit|preventDefault={handleSubmit} class="max-w-sm mx-auto flex h-screen flex-col justify-center">
-	<Input bind:value={project.name} id="name">
+	<Input bind:this={nameInputEl} bind:value={project.name} id="name">
 		Name
 		<div slot="error">
 			{#if submitted }

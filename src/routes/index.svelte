@@ -6,7 +6,6 @@
 	import { db } from '$lib/db';
 	import { liveQuery } from 'dexie';
 	import type { Observable } from 'dexie';
-	import EmptyProjects from '$lib/views/index/EmptyProjects.svelte';
 	import { onMount } from 'svelte';
 	import type { Projects } from '$lib/models/project';
 	import { tap } from '$lib/utils/tap';
@@ -23,7 +22,7 @@
 			localStorage.removeItem('maschenzaehler');
 			localStorage.setItem('_maschenzaehler', JSON.stringify(localStorageValue));
 		}
-	}
+	};
 
 	onMount(() => {
 		projects = liveQuery(
@@ -36,15 +35,16 @@
 </script>
 
 <style lang="postcss">
-	.content {
-			@apply flex flex-col text-center justify-center max-w-sm mx-auto -mb-12;
+    .content {
+        @apply flex flex-col text-center justify-center max-w-sm mx-auto -mb-12;
 
-			min-height: calc(100vh - 12rem);
-	}
+        min-height: calc(100vh - 12rem);
+    }
 </style>
 
-<div class="flex justify-center items-center align-middle py-1 opacity-50 hover:opacity-60 transition-opacity cursor-default">
-	<img src="/icons/icon_150.png" alt="Ball of wool" class="max-w-[100px] -mr-4 pointer-events-none"/>
+<div
+	class="flex justify-center items-center align-middle py-1 opacity-50 hover:opacity-60 transition-opacity cursor-default">
+	<img src="/icons/icon_150.png" alt="Ball of wool" class="max-w-[100px] -mr-4 pointer-events-none" />
 	<div class="text-3xl font-light">
 		Maschenzähler
 	</div>
@@ -52,17 +52,29 @@
 
 {#if loading}
 	loading...
-{:else if $projects?.length}
+{:else if $projects}
 	<div class="content">
-		{#each $projects as project (project.id)}
+		{#if $projects.length}
+			{#each $projects as project (project.id)}
 				<a href="/projects/{project.id}"
 					 class="p-4 border-b border-gray-200 dark:border-gray-700"
 				>
 					{project.name}
 				</a>
-		{/each}
-		<a href="/projects/add" class="p-4 opacity-30 hover:opacity-100 transition-opacity">add project</a>
+			{/each}
+		{:else}
+			<div
+				 class="p-4 border-b border-gray-200 dark:border-gray-700"
+			>
+				no projects found 🤷
+			</div>
+		{/if}
+		<a href="/projects/add"
+			 class="p-4 hover:opacity-100 transition-opacity"
+			 class:text-primary={!$projects.length}
+			 class:opacity-30={!!$projects.length}
+		>
+			add project
+		</a>
 	</div>
-{:else }
-	<EmptyProjects />
 {/if}
