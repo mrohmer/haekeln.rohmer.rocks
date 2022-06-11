@@ -24,11 +24,18 @@
 
 <style lang="postcss">
 	.content {
-			@apply flex flex-col text-center justify-center max-w-sm mx-auto pt-20 -mb-12;
+			@apply flex flex-col text-center justify-center max-w-sm mx-auto -mb-12;
 
-			min-height: calc(100vh - 5rem);
+			min-height: calc(100vh - 12rem);
 	}
 </style>
+
+<div class="flex justify-center items-center align-middle py-1 opacity-50 hover:opacity-60 transition-opacity cursor-default">
+	<img src="/icons/icon_150.png" alt="Ball of wool" class="max-w-[100px] -mr-4 pointer-events-none"/>
+	<div class="text-3xl font-light">
+		Maschenzähler
+	</div>
+</div>
 
 {#if loading}
 	loading...
