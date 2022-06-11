@@ -38,21 +38,21 @@
 			<a href="/"><Icon icon={homeIcon}/></a>
 		</div>
 		<div class="inline-block align-middle py-1 px-2 border-b-2 border-transparent font-light max-w-[75px] truncate sm:max-w-xs md:max-w-md"
-				 class:border-secondary={$page.path === `/projects/${$project.id}`}>
+				 class:border-secondary={$page.url.pathname === `/projects/${$project.id}`}>
 			<a href="/projects/{$project.id}">{$project.name}</a>
 		</div>
 		<div class="flex-1 overflow-x-auto align-middle whitespace-nowrap">
 			{#if $parts?.length}
 				{#each $parts as part}
 					<div class="inline-block align-middle py-1 px-2 border-b-2 border-transparent"
-							 class:border-secondary={$page.path === `/projects/${$project.id}/parts/${part.id}`}>
+							 class:border-secondary={$page.url.pathname === `/projects/${$project.id}/parts/${part.id}`}>
 						<a href="/projects/{$project.id}/parts/{part.id}">{part.name}</a>
 					</div>
 				{/each}
 			{/if}
 		</div>
 		<div class="align-middle py-0.5 px-2 mt-px border-b-2 border-transparent"
-				 class:border-secondary={$page.path === `/projects/${$project.id}/parts/add`}>
+				 class:border-secondary={$page.url.pathname === `/projects/${$project.id}/parts/add`}>
 			<a href="/projects/{$project.id}/parts/add">
 				<Icon icon={addIcon}/>
 			</a>
