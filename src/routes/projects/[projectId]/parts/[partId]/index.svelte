@@ -18,6 +18,7 @@
 	import { confirmAction } from '$lib/utils/confirm-action';
 	import AddRound from '$lib/views/project-parts/AddRound.svelte';
 	import { slide } from 'svelte/transition';
+	import { goto } from '$app/navigation';
 
 	let loading = true;
 	let part: Observable<ProjectPart>;
@@ -64,7 +65,10 @@
 			roundIds.map(id => db.rounds.update(id, { state: 0 }))
 		));
 	};
-	const handleRemoveClick = () => db.projectParts.delete($part.id);
+	const handleRemoveClick = async () => {
+		await db.projectParts.delete($part.id);
+		await goto('..');
+	}
 	const handleAddRound = async (index: number) => {
 		editRoundId = await db.transaction('rw', db.projectParts, db.rounds, async () => {
 			const roundId = await db.rounds.add({
@@ -109,7 +113,7 @@
 </script>
 {#if loading}
 	loading...
-{:else if $rounds}
+{:else if $rounds && $part}
 	{#if editMode}
 		<div transition:slide|local>
 			<AddRound count={$rounds.length} on:click={() => handleAddRound(0)} />
