@@ -5,6 +5,7 @@
 	import { faTrash as removeIcon, faChevronUp as upIcon, faChevronDown as downIcon } from '@fortawesome/free-solid-svg-icons';
 	import Icon from '$lib/components/Icon.svelte';
 	import { createEventDispatcher } from 'svelte';
+	import { debounceTime } from '$lib/utils/debounce-time';
 
 	const dispatch = createEventDispatcher();
 
@@ -42,7 +43,7 @@
 				</div>
 			{/each}
 		</div>
-		<input class="flex-1" value={round.name} on:input={handleNameChange} type="text" />
+		<input class="flex-1" value={round.name} on:input={debounceTime(handleNameChange, 500)} type="text" />
 		<button on:click={() => !isFirst && dispatch('up')} class="px-1 mr-px opacity-60 hover:opacity-100 transition-opacity" class:disabled={isFirst}>
 			<Icon icon={upIcon}/>
 		</button>

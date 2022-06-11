@@ -12,6 +12,7 @@
 	import { goto } from '$app/navigation';
 	import Button from '$lib/components/Button.svelte';
 	import Input from '$lib/components/Input.svelte';
+	import { debounceTime } from '$lib/utils/debounce-time';
 
 	let project: Observable<Project>;
 
@@ -54,7 +55,7 @@
 </script>
 
 {#if $project?.name}
-	<Input value={$project.name} on:input={handleNameChange}>
+	<Input value={$project.name} on:input={debounceTime(handleNameChange, 500)}>
 		Name
 	</Input>
 
