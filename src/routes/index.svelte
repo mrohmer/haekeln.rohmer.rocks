@@ -44,7 +44,7 @@
 
 <div
 	class="flex justify-center items-center align-middle py-1 opacity-50 hover:opacity-60 transition-opacity cursor-default">
-	<img src="/icons/icon_150.png" alt="Ball of wool" class="max-w-[100px] -mr-4 pointer-events-none" />
+	<img src="/icons/icon_150.png" alt="Ball of wool" class="max-w-[100px] -mr-4 pointer-events-none dark:invert" />
 	<div class="text-3xl font-light">
 		Maschenzähler
 	</div>
