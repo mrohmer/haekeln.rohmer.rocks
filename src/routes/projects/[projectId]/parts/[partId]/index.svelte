@@ -48,6 +48,17 @@
 
 		await db.projectParts.update(Number($page.params.partId), {roundIds});
 	}
+	const handleResetClick = async () => {
+		const roundIds = $rounds.map(round => round.id);
+
+		if (!roundIds.length) {
+			return;
+		}
+
+		await db.transaction('rw', db.rounds, () => Promise.all(
+			roundIds.map(id => db.rounds.update(id, { state: 0 }))
+		));
+	};
 	const handleRemoveClick = async () => {
 		if (confirm(`Do you really want to delete ${$part.name}?`)) {
 			await db.projectParts.delete($part.id);
@@ -87,6 +98,9 @@
 		<Input value={$part.name} on:input={debounceTime(handleNameChange, 500)}>
 			Name
 		</Input>
-		<Button on:click={handleRemoveClick}>remove</Button>
+		<div class="flex">
+			<Button on:click={handleResetClick}>reset</Button>
+			<Button on:click={handleRemoveClick}>remove</Button>
+		</div>
 	</div>
 {/if}
