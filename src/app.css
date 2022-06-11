@@ -7,7 +7,7 @@
 }
 
 input, [contenteditable="true"] {
-    @apply bg-transparent outline-0;
+    @apply bg-transparent outline-none focus:outline-none;
 }
 
 .border-primary {
