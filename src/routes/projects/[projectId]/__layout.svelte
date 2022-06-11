@@ -11,18 +11,23 @@
 	import Icon from '$lib/components/Icon.svelte';
 
 	let loading = true;
+	let mounted = false;
 
 	let project: Observable<Project>;
 	let parts: Observable<ProjectParts>;
-	onMount(() => {
-		project = liveQuery(
-			() => db.projects.get(Number($page.params.projectId))
-				.then(tap<Project>(() => (loading = false)))
-		)
-		parts = liveQuery(
-			() => db.projectParts.where({projectId: $page.params.projectId}).toArray()
-		)
-	})
+	onMount(() => (mounted = true));
+
+	$: {
+		if (mounted) {
+			project = liveQuery(
+				() => db.projects.get(Number($page.params.projectId))
+					.then(tap<Project>(() => (loading = false)))
+			)
+			parts = liveQuery(
+				() => db.projectParts.where({projectId: $page.params.projectId}).toArray()
+			)
+		}
+	}
 </script>
 {#if loading}
 	loading...
