@@ -13,12 +13,15 @@
 	import Round from '$lib/views/project-parts/Round.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import type { ProjectPart } from '$lib/models/project-part';
+	import Input from '$lib/components/Input.svelte';
+	import { debounceTime } from '$lib/utils/debounce-time';
 
 	let loading = true;
 	let part: Observable<ProjectPart>;
 	let rounds: Observable<Rounds>;
 	let mounted = false;
 
+	const handleNameChange = ({ target }) => db.projectParts.update($part.id, { name: target.value });
 	const handleUp = async (roundId: number) => {
 		const roundIds = $rounds.filter(i => !!i).map(item => item.id).map((item, index, array) => {
 			if (array[index + 1] === roundId) {
@@ -79,7 +82,11 @@
 					 on:down={() => handleDown(round.id)} />
 	{/each}
 
+
 	<div class="mt-20 mb-2">
+		<Input value={$part.name} on:input={debounceTime(handleNameChange, 500)}>
+			Name
+		</Input>
 		<Button on:click={handleRemoveClick}>remove</Button>
 	</div>
 {/if}
