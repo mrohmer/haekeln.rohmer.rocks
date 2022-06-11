@@ -13,6 +13,7 @@
 	import Button from '$lib/components/Button.svelte';
 	import Input from '$lib/components/Input.svelte';
 	import { debounceTime } from '$lib/utils/debounce-time';
+	import { confirmAction } from '$lib/utils/confirm-action';
 
 	let project: Observable<Project>;
 
@@ -31,20 +32,18 @@
 		));
 	};
 	const handleRemoveClick = async () => {
-		if (confirm(`Do you really want to delete ${$project.name}?`)) {
-			await db.transaction('rw', db.projects, db.projectParts, db.rounds, async () => {
-				const parts = await db.projectParts.where({ projectId: $page.params.projectId }).toArray();
+		await db.transaction('rw', db.projects, db.projectParts, db.rounds, async () => {
+			const parts = await db.projectParts.where({ projectId: $page.params.projectId }).toArray();
 
-				const roundIds = parts.map(part => part.roundIds).flat().filter(i => !!i);
+			const roundIds = parts.map(part => part.roundIds).flat().filter(i => !!i);
 
-				return Promise.all([
-					db.projects.delete($project.id),
-					...parts.map(part => db.projectParts.delete(part.id)),
-					...roundIds.map(roundId => db.rounds.delete(roundId))
-				]);
-			});
-			await goto('/');
-		}
+			return Promise.all([
+				db.projects.delete($project.id),
+				...parts.map(part => db.projectParts.delete(part.id)),
+				...roundIds.map(roundId => db.rounds.delete(roundId))
+			]);
+		});
+		await goto('/');
 	};
 
 	onMount(() => {
@@ -60,10 +59,10 @@
 	</Input>
 
 	<div class="flex py-2">
-		<Button on:click={handleResetClick}>
+		<Button on:click={confirmAction(`Do you really want to reset all parts in ${$project.name}?`, handleResetClick)}>
 			reset
 		</Button>
-		<Button on:click={handleRemoveClick}>
+		<Button on:click={confirmAction(`Do you really want to delete ${$project.name}?`, handleRemoveClick)}>
 			remove
 		</Button>
 	</div>

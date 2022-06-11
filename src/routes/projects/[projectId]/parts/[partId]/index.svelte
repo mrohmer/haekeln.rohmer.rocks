@@ -15,6 +15,7 @@
 	import type { ProjectPart } from '$lib/models/project-part';
 	import Input from '$lib/components/Input.svelte';
 	import { debounceTime } from '$lib/utils/debounce-time';
+	import { confirmAction } from '$lib/utils/confirm-action';
 
 	let loading = true;
 	let part: Observable<ProjectPart>;
@@ -59,11 +60,7 @@
 			roundIds.map(id => db.rounds.update(id, { state: 0 }))
 		));
 	};
-	const handleRemoveClick = async () => {
-		if (confirm(`Do you really want to delete ${$part.name}?`)) {
-			await db.projectParts.delete($part.id);
-		}
-	}
+	const handleRemoveClick = () => db.projectParts.delete($part.id)
 
 	onMount(() => {
 		mounted = true;
@@ -99,8 +96,10 @@
 			Name
 		</Input>
 		<div class="flex">
-			<Button on:click={handleResetClick}>reset</Button>
-			<Button on:click={handleRemoveClick}>remove</Button>
+			<Button on:click={confirmAction(`Do you really want to reset ${$part.name}?`, handleResetClick)}>reset</Button>
+			<Button on:click={confirmAction(`Do you really want to delete ${$part.name}?`, handleRemoveClick)}>
+				remove
+			</Button>
 		</div>
 	</div>
 {/if}
