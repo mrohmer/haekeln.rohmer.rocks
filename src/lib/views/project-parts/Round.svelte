@@ -19,6 +19,7 @@
 	const dispatch = createEventDispatcher();
 
 	export let round: Round;
+	export let index: number;
 	export let isFirst: boolean = false;
 	export let isLast: boolean = false;
 	export let editMode = false;
@@ -62,6 +63,11 @@
 </style>
 
 <div bind:this={rootEl} class="flex align-middle p-1" class:pointer-events-none={!round}>
+	<div class="flex flex-col justify-center pr-1">
+		<div>
+			{index >= 0 ? index + 1 : 'x'}.
+		</div>
+	</div>
 	<div class="max-w-max">
 		{#if editMode}
 			<div class="inline-block m-1">

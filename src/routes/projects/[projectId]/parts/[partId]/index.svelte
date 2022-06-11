@@ -116,10 +116,11 @@
 		</div>
 	{/if}
 	{#if $rounds.length}
-		{#each $rounds as round, i}
+		{#each $rounds as round, index}
 			<Round {round}
-						 isFirst={i === 0}
-						 isLast={i === $rounds.length - 1}
+						 {index}
+						 isFirst={index === 0}
+						 isLast={index === $rounds.length - 1}
 						 editMode={editMode}
 						 focusThis={editRoundId === round.id}
 						 on:up={() => handleUp(round.id)}
