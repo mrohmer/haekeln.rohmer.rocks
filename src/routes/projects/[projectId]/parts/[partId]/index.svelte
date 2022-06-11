@@ -16,6 +16,8 @@
 	import Input from '$lib/components/Input.svelte';
 	import { debounceTime } from '$lib/utils/debounce-time';
 	import { confirmAction } from '$lib/utils/confirm-action';
+	import Icon from '$lib/components/Icon.svelte';
+	import {faPlus as addIcon} from '@fortawesome/free-solid-svg-icons';
 
 	let loading = true;
 	let part: Observable<ProjectPart>;
@@ -34,8 +36,8 @@
 			return item;
 		});
 
-		await db.projectParts.update(Number($page.params.partId), {roundIds});
-	}
+		await db.projectParts.update(Number($page.params.partId), { roundIds });
+	};
 	const handleDown = async (roundId: number) => {
 		const roundIds = $rounds.filter(i => !!i).map(item => item.id).map((item, index, array) => {
 			if (array[index - 1] === roundId) {
@@ -47,8 +49,8 @@
 			return item;
 		});
 
-		await db.projectParts.update(Number($page.params.partId), {roundIds});
-	}
+		await db.projectParts.update(Number($page.params.partId), { roundIds });
+	};
 	const handleResetClick = async () => {
 		const roundIds = $rounds.map(round => round.id);
 
@@ -60,7 +62,17 @@
 			roundIds.map(id => db.rounds.update(id, { state: 0 }))
 		));
 	};
-	const handleRemoveClick = () => db.projectParts.delete($part.id)
+	const handleRemoveClick = () => db.projectParts.delete($part.id);
+	const handleAddRound = async () => {
+		await db.transaction('rw', db.projectParts, db.rounds, async () => {
+			const roundId = await db.rounds.add({
+				name: 'new',
+				checkboxAmount: 1,
+				state: 0,
+			});
+			return db.projectParts.update($part.id, {roundIds: [...$part.roundIds, roundId]})
+		});
+	}
 
 	onMount(() => {
 		mounted = true;
@@ -82,13 +94,28 @@
 {#if loading}
 	loading...
 {:else if $rounds}
-	{#each $rounds as round, i}
-		<Round {round}
-					 isFirst={i === 0}
-					 isLast={i === $rounds.length - 1}
-					 on:up={() => handleUp(round.id)}
-					 on:down={() => handleDown(round.id)} />
-	{/each}
+	{#if $rounds.length}
+		{#each $rounds as round, i}
+			<Round {round}
+						 isFirst={i === 0}
+						 isLast={i === $rounds.length - 1}
+						 on:up={() => handleUp(round.id)}
+						 on:down={() => handleDown(round.id)} />
+		{/each}
+	{:else}
+		<div class="opacity-60 text-center py-4">
+			No rounds added yet 🤷.
+		</div>
+	{/if}
+
+	<div class="border-t cursor-pointer mt-2 opacity-60 hover:opacity-100 transition-opacity" on:click={handleAddRound}>
+		<div class="absolute inset-0 opacity-50">
+			<Round />
+		</div>
+		<div class="text-center py-px leading-10">
+			add round
+		</div>
+	</div>
 
 
 	<div class="mt-20 mb-2">
