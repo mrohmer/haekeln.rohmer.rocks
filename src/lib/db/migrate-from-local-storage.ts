@@ -1,5 +1,6 @@
 import { db } from '$lib/db/index';
 import type { Rounds } from '$lib/models/round';
+import { generateName } from '$lib/utils/generate-name';
 
 interface LocalStorageStep {
 	text: string;
@@ -13,7 +14,7 @@ export const migrateFromLocalStorage = async (localStorageValue: LocalStorageVal
 		return;
 	}
 
-	const projectId = String(await db.projects.add({ name: 'migrated' }));
+	const projectId = String(await db.projects.add({ name: generateName() }));
 
 	return Promise.all(Object.entries(localStorageValue)
 		.filter(([key, value]) => value?.steps?.length)

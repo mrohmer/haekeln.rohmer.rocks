@@ -39,6 +39,7 @@
     "cookie": "^0.4.1",
     "dexie": "^3.2.2",
     "sass": "^1.52.3",
+    "unique-names-generator": "^4.7.1",
     "workbox-precaching": "^6.2.4"
   }
 }
