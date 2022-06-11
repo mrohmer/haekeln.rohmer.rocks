@@ -131,7 +131,7 @@
 			/>
 			{#if editMode}
 				<div transition:slide|local>
-					<AddRound on:click={() => handleAddRound(i + 1)} />
+					<AddRound on:click={() => handleAddRound(index + 1)} />
 				</div>
 			{/if}
 		{/each}
