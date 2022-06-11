@@ -112,13 +112,14 @@
 {:else if $rounds}
 	{#if editMode}
 		<div transition:slide|local>
-			<AddRound on:click={() => handleAddRound(0)} />
+			<AddRound count={$rounds.length} on:click={() => handleAddRound(0)} />
 		</div>
 	{/if}
 	{#if $rounds.length}
 		{#each $rounds as round, index}
 			<Round {round}
 						 {index}
+						 count={$rounds.length}
 						 isFirst={index === 0}
 						 isLast={index === $rounds.length - 1}
 						 editMode={editMode}
@@ -131,7 +132,7 @@
 			/>
 			{#if editMode}
 				<div transition:slide|local>
-					<AddRound on:click={() => handleAddRound(index + 1)} />
+					<AddRound count={$rounds.length} on:click={() => handleAddRound(index + 1)} />
 				</div>
 			{/if}
 		{/each}

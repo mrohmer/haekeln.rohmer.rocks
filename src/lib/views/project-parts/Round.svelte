@@ -25,6 +25,8 @@
 	export let editMode = false;
 	export let focusThis = false;
 
+	export let count = 0;
+
 	let mounted = false;
 	let rootEl: HTMLDivElement;
 	let nameEl: HTMLDivElement;
@@ -63,7 +65,10 @@
 </style>
 
 <div bind:this={rootEl} class="flex align-middle p-1" class:pointer-events-none={!round}>
-	<div class="flex flex-col justify-center pr-1">
+	<div class="flex flex-col justify-center pr-1 text-right"
+			 class:min-w-[23px]={count >= 10 && count < 100}
+			 class:min-w-[35px]={count >= 100}
+	>
 		<div>
 			{index >= 0 ? index + 1 : 'x'}.
 		</div>
