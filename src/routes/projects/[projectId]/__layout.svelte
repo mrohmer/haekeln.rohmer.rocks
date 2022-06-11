@@ -31,11 +31,11 @@
 		<div class="align-middle py-0.5 px-2 -ml-2 mt-px border-b-2 border-transparent">
 			<a href="/"><Icon icon={homeIcon}/></a>
 		</div>
+		<div class="inline-block align-middle py-1 px-2 border-b-2 border-transparent font-light"
+				 class:border-secondary={$page.path === `/projects/${$project.id}`}>
+			<a href="/projects/{$project.id}">{$project.name}</a>
+		</div>
 		<div class="flex-1 overflow-x-auto align-middle whitespace-nowrap">
-			<div class="inline-block align-middle py-1 px-2 border-b-2 border-transparent"
-					 class:border-secondary={$page.path === `/projects/${$project.id}`}>
-				<a href="/projects/{$project.id}">Detail</a>
-			</div>
 			{#if $parts?.length}
 				{#each $parts as part}
 					<div class="inline-block align-middle py-1 px-2 border-b-2 border-transparent"
