@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    @apply relative box-border;
+}
+
+input, [contenteditable="true"] {
+    @apply bg-transparent outline-0;
+}
+
+.border-primary {
+    border-color: var(--color-primary);
+}
+.border-secondary {
+    border-color: var(--color-secondary);
+}

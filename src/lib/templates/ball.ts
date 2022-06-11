@@ -1,26 +1,26 @@
-import type { StepsGeneratorFn } from '$lib/models/generator';
-import { createStep } from '$lib/templates/utils';
-import type { IStep } from '$lib/models/step';
+import type { RoundGeneratorFn } from '$lib/models/generator';
+import { createRound } from '$lib/templates/utils';
+import type { Round } from '$lib/models/round';
 
-export interface StepsGeneratorArgs {
+export interface RoundGeneratorArgs {
 	amount: number;
 }
 
-export const ballTemplate: StepsGeneratorFn<StepsGeneratorArgs> = ({amount}: StepsGeneratorArgs) => {
+export const ballTemplate: RoundGeneratorFn<RoundGeneratorArgs> = ({amount}: RoundGeneratorArgs) => {
 	const fmIncreaseSteps = [];
 	const fmDecreaseSteps = [];
 	for (let i = 1; i < amount; i++) {
-		fmIncreaseSteps.push(createStep(`${i} fM, verdoppeln (${(i + 2) * 6})`));
-		fmDecreaseSteps.push(createStep(`${i} fM, Abnahme (${(i + 1) * 6})`));
+		fmIncreaseSteps.push(createRound(`${i} fM, verdoppeln (${(i + 2) * 6})`));
+		fmDecreaseSteps.push(createRound(`${i} fM, Abnahme (${(i + 1) * 6})`));
 	}
 
 	return [
-		createStep(`Magic Ring (6)`),
-		createStep(`verdoppeln (12)`),
+		createRound(`Magic Ring (6)`),
+		createRound(`verdoppeln (12)`),
 		...fmIncreaseSteps,
-		createStep('Runde', amount + 1),
+		createRound('Runde', amount + 1),
 		...fmDecreaseSteps.reverse(),
-		createStep(`Abnahme (6)`),
-		createStep(`Vernähen`),
-	] as IStep[]
+		createRound(`Abnahme (6)`),
+		createRound(`Vernähen`),
+	] as Round[]
 }

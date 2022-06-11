@@ -3,230 +3,78 @@
 </script>
 
 <script lang="ts">
-	import { writable } from 'svelte/store';
-	import { writable as localStorageWritable } from '$lib/stores/local-storage';
-	import type { IProject, IProjects } from '$lib/models/project';
-	import type { IStep } from '$lib/models/step';
-	import NoProjects from '$lib/components/views/NoProjects.svelte';
-	import Modal from '$lib/components/elements/Modal.svelte';
-	import AddProject from '$lib/components/views/AddProject.svelte';
-	import Tabs from '$lib/components/elements/Tabs/Tabs.svelte';
-	import Tab from '$lib/components/elements/Tabs/Tab.svelte';
-	import Project from '../lib/components/views/Project.svelte';
-	import { PoweredBy } from '@rohmer/svelte-base';
-	import Icon from '../lib/components/elements/Icon.svelte';
-	import {faPlus} from '@fortawesome/free-solid-svg-icons/faPlus.js';
-	import SaveProjectAsTemplate from '$lib/components/views/SaveProjectAsTemplate.svelte';
-	import type { ITemplates } from '$lib/models/template';
-	import { omitKeyInArray } from '$lib/utils/omit-key';
+	import { db } from '$lib/db';
+	import { liveQuery } from 'dexie';
+	import type { Observable } from 'dexie';
+	import { onMount } from 'svelte';
+	import type { Projects } from '$lib/models/project';
+	import { tap } from '$lib/utils/tap';
+	import { migrateFromLocalStorage } from '$lib/db/migrate-from-local-storage';
 
-	const data = localStorageWritable<IProjects>('maschenzaehler', {});
-	const currentProjectKey = writable<string | undefined>();
+	let projects: Observable<Projects>;
+	let loading = true;
 
-	const templates = localStorageWritable<ITemplates>('templates', {});
+	const migrate = async () => {
+		const localStorageValue = JSON.parse(localStorage.getItem('maschenzaehler') ?? '');
+		if (localStorageValue) {
+			await db.transaction('rw', db.projects, db.projectParts, db.rounds, () => migrateFromLocalStorage(localStorageValue));
 
-	const name = 'Matthias Rohmer';
-	const url = 'https://matthias.rohmer.rocks';
-	const technologies = ['svelte', 'netlify'];
-	const sourceCodeUrl = 'https://github.com/mrohmer/haekeln.rohmer.rocks';
-
-	let openModal: 'addProject'|'saveAsTemplate' = undefined;
-
-	const updateSteps = (cb: (steps: IStep[]) => IStep[]) => data.set({
-		...(($data ?? {}) as Record<string, IProject>),
-		[$currentProjectKey]: {
-			...($data[$currentProjectKey] ?? {}),
-			steps: cb([...$data[$currentProjectKey]?.steps])
+			localStorage.removeItem('maschenzaehler');
+			localStorage.setItem('_maschenzaehler', JSON.stringify(localStorageValue));
 		}
+	};
+
+	onMount(() => {
+		projects = liveQuery(
+			() => db.projects.toArray()
+				.then(tap<Projects>(() => (loading = false)))
+		);
+
+		migrate();
 	});
-
-	const handleChange = ({ state, index }) => updateSteps(
-		steps => {
-			const tmp = [...steps];
-			tmp[index] = {
-				...(tmp[index] ?? { text: '', state: 0, checkboxAmount: 1 }),
-				state
-			};
-			return tmp;
-		}
-	);
-	const handleAddProject = ({ title, steps }) => {
-		if (!projects.includes(title)) {
-			data.set({
-				...(($data ?? {}) as Record<string, IProject>),
-				[title]: {
-					title,
-					steps
-				} as IProject
-			});
-		}
-
-		currentProjectKey.set(title);
-		openModal = undefined;
-	};
-	const handleAddStep = ({ checkboxAmount, text }: Partial<IStep>) =>
-		updateSteps(steps => [
-			...(steps ?? []),
-			{
-				text,
-				checkboxAmount,
-				state: 0
-			}
-		]);
-	const handleRemoveStep = ({ index }: Record<'index', number>) =>
-		updateSteps(steps => {
-			const step = steps[index];
-			const confirmation = confirm(`Wolltest du wirklich '${step.text}' löschen?`);
-			if (confirmation) {
-				steps.splice(index, 1);
-			}
-			return steps;
-		});
-	const handleEditStep = ({ index, step }: Record<'index', number> & Record<'step', Partial<any>>) =>
-		updateSteps(steps => {
-			const original = steps[index];
-			const changed = ['checkboxAmount', 'text'].some(key => original[key] !== step[key]);
-			if (changed) {
-				steps[index] = {
-					...original,
-					checkboxAmount: step.checkboxAmount ?? original.checkboxAmount,
-					text: step.text ?? original.text,
-				};
-			}
-			return steps;
-		});
-	const handleResetProject = () => updateSteps(
-		steps => steps
-			.map(step => ({
-				...step,
-				state: 0
-			}))
-	);
-	const handleRemoveProject = () => {
-		const tmp = Object.entries($data)
-			.filter(([key]) => key !== $currentProjectKey)
-			.reduce(
-				(prev, [key, value]) => ({
-					...prev,
-					[key]: value
-				}),
-				{} as IProjects
-			);
-
-		data.set(tmp);
-	};
-
-	const getCurrentProject = (lData: IProjects, lCurrentProjectKey: string) => {
-		if (!lData || !Object.keys(lData).length) {
-			return null;
-		}
-
-		if (!lCurrentProjectKey || !(lCurrentProjectKey in lData)) {
-			const first = Object.keys(lData)[0];
-			currentProjectKey.set(first);
-			return lData[first];
-		}
-		return lData[lCurrentProjectKey];
-	};
-	const handleChangeOrder = ({steps}) => updateSteps(() => steps);
-	const handleSaveProjectAsTemplate = ({title}) => {
-		const tmp: ITemplates = {
-			...$templates,
-			[`custom-${title}`]: {
-				title,
-				steps: omitKeyInArray(project.steps, 'state'),
-			}
-		};
-
-		templates.set(tmp);
-		openModal = undefined;
-	};
-
-	$: project = getCurrentProject($data, $currentProjectKey);
-	$: projects = $data ? Object.keys($data) : [];
-	$: title = project?.title ?? $currentProjectKey;
 </script>
 
-<svelte:head>
-	<title>Maschenzähler</title>
-	<meta name="description" content="Digitaler Maschenzähler.">
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-	<meta name="theme-color" content="#AA2F67" />
-	<link rel="manifest" href="manifest.json" />
-	<meta name="apple-mobile-web-app-capable" content="yes" />
-	<meta name="apple-mobile-web-app-title" content="Maschenzähler" />
-	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-</svelte:head>
+<style lang="postcss">
+    .content {
+        @apply flex flex-col text-center justify-center max-w-sm mx-auto -mb-12;
 
-<style lang="scss">
-  @use "src/styles/_variables" as var;
-
-	:global(*) {
-		box-sizing: border-box;
-		position: relative;
-	}
-  :global(html, body) {
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-  }
-
-  :global(body) {
-    background-color: var.$background;
-  }
-	:global(a) {
-		color: var.$primary;
-	}
-
-	.container {
-		width: 100%;
-		padding: 0 20px;
-		max-width: 1000px;
-		margin: auto;
-	}
+        min-height: calc(100vh - 12rem);
+    }
 </style>
 
-<main>
-	<div class="container">
-		{#if projects.length}
-			<Tabs>
-				{#each projects as p}
-					<Tab active={$currentProjectKey === p} on:click={() => currentProjectKey.set(p)}>{p}</Tab>
-				{/each}
-				<Tab on:click={() => openModal = 'addProject'} light={true}>
-					<Icon icon="{faPlus}" />
-				</Tab>
-			</Tabs>
-
-			{#if project}
-				<Project project={project}
-								 on:changeStep={({detail}) => handleChange(detail)}
-								 on:addStep={({detail}) => handleAddStep(detail)}
-								 on:editStep={({detail}) => handleEditStep(detail)}
-								 on:removeStep={({detail}) => handleRemoveStep(detail)}
-								 on:reset={() => handleResetProject()}
-								 on:remove={() => handleRemoveProject()}
-								 on:changeOrder={({detail}) => handleChangeOrder(detail)}
-								 on:saveAsTemplate={() => openModal = 'saveAsTemplate'}
-				>
-					<PoweredBy {name} {url} {technologies} {sourceCodeUrl} />
-				</Project>
-
-			{/if}
-		{:else}
-			<NoProjects on:click={() => openModal = 'addProject'} />
-			<PoweredBy {name} {url} {technologies} {sourceCodeUrl} />
-		{/if}
-
-		{#if openModal === 'addProject'}
-			<Modal on:close={() => openModal = undefined}>
-				<AddProject customTemplates={$templates} on:save={e => handleAddProject(e.detail)} />
-			</Modal>
-		{/if}
-		{#if openModal === 'saveAsTemplate'}
-			<Modal on:close={() => openModal = undefined}>
-				<SaveProjectAsTemplate templates={$templates} {title} on:save={({detail}) => handleSaveProjectAsTemplate(detail)} />
-			</Modal>
-		{/if}
+<div
+	class="flex justify-center items-center align-middle py-1 opacity-50 hover:opacity-60 transition-opacity cursor-default">
+	<img src="/icons/icon_150.png" alt="Ball of wool" class="max-w-[100px] -mr-4 pointer-events-none" />
+	<div class="text-3xl font-light">
+		Maschenzähler
 	</div>
-</main>
+</div>
+
+{#if loading}
+	loading...
+{:else if $projects}
+	<div class="content">
+		{#if $projects.length}
+			{#each $projects as project (project.id)}
+				<a href="/projects/{project.id}"
+					 class="p-4 border-b border-gray-200 dark:border-gray-700"
+				>
+					{project.name}
+				</a>
+			{/each}
+		{:else}
+			<div
+				 class="p-4 border-b border-gray-200 dark:border-gray-700"
+			>
+				no projects found 🤷
+			</div>
+		{/if}
+		<a href="/projects/add"
+			 class="p-4 hover:opacity-100 transition-opacity"
+			 class:text-primary={!$projects.length}
+			 class:opacity-30={!!$projects.length}
+		>
+			add project
+		</a>
+	</div>
+{/if}

@@ -1,3 +1,3 @@
-import type { IStep } from '$lib/models/step';
+import type { Round } from '$lib/models/round';
 
-export type StepsGeneratorFn<T> = (args: T) => IStep[];
+export type RoundGeneratorFn<T> = (args: T) => Round[];

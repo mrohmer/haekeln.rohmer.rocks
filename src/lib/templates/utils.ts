@@ -1,3 +1,3 @@
-import type { IStep } from '$lib/models/step';
+import type { Round } from '$lib/models/round';
 
-export const createStep = (text: string, checkboxAmount = 1): IStep => ({text, checkboxAmount, state: 0});
+export const createRound = (name: string, checkboxAmount = 1): Round => ({name, checkboxAmount, state: 0});

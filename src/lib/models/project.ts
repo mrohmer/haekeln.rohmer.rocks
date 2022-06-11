@@ -1,7 +1,5 @@
-import type { IStep } from './step';
-
-export interface IProject {
-	title: string;
-	steps: IStep[];
+export interface Project {
+	id?: number;
+	name: string;
 }
-export type IProjects = Record<string, IProject>;
+export type Projects = Project[];
