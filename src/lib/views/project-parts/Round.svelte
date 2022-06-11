@@ -68,7 +68,7 @@
 			{index >= 0 ? index + 1 : 'x'}.
 		</div>
 	</div>
-	<div class="max-w-max">
+	<div class="max-w-[75%] sm:max-w-[50%]">
 		{#if editMode}
 			<div class="inline-block m-1">
 				<CheckboxButton type="-" on:click={() => handleCheckboxAmountChange(-1)}
