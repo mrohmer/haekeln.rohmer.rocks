@@ -22,10 +22,18 @@
 	});
 </script>
 
+<style lang="postcss">
+	.content {
+			@apply flex flex-col text-center justify-center max-w-sm mx-auto pt-20 -mb-12;
+
+			min-height: calc(100vh - 5rem);
+	}
+</style>
+
 {#if loading}
 	loading...
 {:else if $projects?.length}
-	<div class="flex h-screen flex-col text-center justify-center max-w-sm mx-auto py-9">
+	<div class="content">
 		{#each $projects as project (project.id)}
 				<a href="/projects/{project.id}"
 					 class="p-4 border-b border-gray-200 dark:border-gray-700"

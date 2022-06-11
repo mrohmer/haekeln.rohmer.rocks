@@ -38,6 +38,7 @@
     "@rohmer/svelte-base": "^1.0.0",
     "cookie": "^0.4.1",
     "dexie": "^3.2.2",
+    "sass": "^1.52.3",
     "workbox-precaching": "^6.2.4"
   }
 }

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../app.css';
+	import { PoweredBy } from '@rohmer/svelte-base';
 </script>
 
 <svelte:head>
@@ -15,4 +16,11 @@
 
 <div class="w-full max-w-5xl mx-auto px-5">
 	<slot />
+
+	<div class="mt-4">
+		<PoweredBy name="Matthias Rohmer"
+							 url="https://matthias.rohmer.rocks"
+							 technologies={['svelte', 'netlify']}
+							 sourceCodeUrl="https://github.com/mrohmer/haekeln.rohmer.rocks" />
+	</div>
 </div>
