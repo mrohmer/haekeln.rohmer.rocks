@@ -22,12 +22,6 @@
 		await db.rounds.update(round.id, { state: round.state + shift });
 	};
 	const handleNameChange = ({ target }) => db.rounds.update(round.id, { name: target.value });
-
-	const handleRemoveClick = async () => {
-		if (confirm(`Do you really want to delete ${round.name}?`)) {
-			await db.rounds.delete(round.id);
-		}
-	};
 </script>
 
 <style lang="postcss">
@@ -58,7 +52,7 @@
 					disabled={!round}>
 		<Icon icon={downIcon} />
 	</button>
-	<button on:click={handleRemoveClick}
+	<button on:click={() => dispatch('remove')}
 					class="px-1 mr-px opacity-60 hover:opacity-100 transition-opacity"
 					class:disabled={!round}
 					disabled={!round}>

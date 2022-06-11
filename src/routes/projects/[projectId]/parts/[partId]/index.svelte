@@ -16,8 +16,6 @@
 	import Input from '$lib/components/Input.svelte';
 	import { debounceTime } from '$lib/utils/debounce-time';
 	import { confirmAction } from '$lib/utils/confirm-action';
-	import Icon from '$lib/components/Icon.svelte';
-	import {faPlus as addIcon} from '@fortawesome/free-solid-svg-icons';
 
 	let loading = true;
 	let part: Observable<ProjectPart>;
@@ -73,6 +71,10 @@
 			return db.projectParts.update($part.id, {roundIds: [...$part.roundIds, roundId]})
 		});
 	}
+	const handleRemoveRound = (id: number) => db.transaction('rw', db.projectParts, db.rounds, async () => {
+			await db.rounds.delete(id);
+			return db.projectParts.update($part.id, {roundIds: $part.roundIds.filter(i => i !== id)})
+		});
 
 	onMount(() => {
 		mounted = true;
@@ -86,6 +88,7 @@
 			rounds = liveQuery(
 				() => db.projectParts.get(Number($page.params.partId))
 					.then(part => part && Promise.all(part.roundIds.map(id => db.rounds.get(id))))
+					.then(rounds => rounds ? rounds.filter(r => !!r) : undefined)
 					.then(tap<Rounds>(() => loading = false))
 			);
 		}
@@ -100,7 +103,9 @@
 						 isFirst={i === 0}
 						 isLast={i === $rounds.length - 1}
 						 on:up={() => handleUp(round.id)}
-						 on:down={() => handleDown(round.id)} />
+						 on:down={() => handleDown(round.id)}
+						 on:remove={confirmAction(`Do you really want to delete ${round.name}?`, () => handleRemoveRound(round.id))}
+			/>
 		{/each}
 	{:else}
 		<div class="opacity-60 text-center py-4">
