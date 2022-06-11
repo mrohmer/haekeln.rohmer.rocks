@@ -1,6 +1,6 @@
 export interface ProjectPart {
 	id?: number;
-	projectId: number;
+	projectId: string; // it needs to be a string 🤷
 	name: string;
 	roundIds: number[];
 }

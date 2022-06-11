@@ -95,7 +95,8 @@
 		<Input value={$part.name} on:input={debounceTime(handleNameChange, 500)}>
 			Name
 		</Input>
-		<div class="flex">
+		<div class="sm:flex">
+			<Button href="./{$part.id}/duplicate">duplicate</Button>
 			<Button on:click={confirmAction(`Do you really want to reset ${$part.name}?`, handleResetClick)}>reset</Button>
 			<Button on:click={confirmAction(`Do you really want to delete ${$part.name}?`, handleRemoveClick)}>
 				remove

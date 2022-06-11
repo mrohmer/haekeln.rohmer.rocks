@@ -58,7 +58,10 @@
 		Name
 	</Input>
 
-	<div class="flex py-2">
+	<div class="sm:flex py-2">
+		<Button href="./{$project.id}/duplicate">
+			duplicate
+		</Button>
 		<Button on:click={confirmAction(`Do you really want to reset all parts in ${$project.name}?`, handleResetClick)}>
 			reset
 		</Button>

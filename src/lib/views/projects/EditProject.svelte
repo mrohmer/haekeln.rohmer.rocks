@@ -10,15 +10,16 @@
 	export let project: Project = {
 		name: ''
 	};
+	export let buttonText = 'add';
 
 	let submitted = false;
 
-	const forbiddenNames = ['add'];
+	const forbiddenNames = ['add', 'duplicate'];
 
 	const handleSubmit = () => {
 		submitted = true;
 
-		if (!project.name?.trim() || forbiddenNames.includes(project.name)) {
+		if (!project.name?.trim() || forbiddenNames.includes(project.name.trim().toLowerCase())) {
 			return;
 		}
 
@@ -37,12 +38,12 @@
 				{#if !project.name?.trim()}
 					<InputError slot="error">Name cannot be empty.</InputError>
 				{/if}
-				{#if forbiddenNames.includes(project.name?.trim())}
+				{#if forbiddenNames.includes(project.name?.trim().toLowerCase())}
 					<InputError slot="error">Name is not allowed.</InputError>
 				{/if}
 			{/if}
 		</div>
 	</Input>
 
-	<Button type="submit">{project.id ? 'Save' : 'Add'}</Button>
+	<Button type="submit">{buttonText}</Button>
 </form>
