@@ -6,7 +6,7 @@
 
 <style lang="postcss">
     .checkbox {
-        @apply w-5 h-5 rounded mr-1 mb-1 inline-block align-middle;
+        @apply w-5 h-5 rounded mr-1 inline-block align-middle;
         border: 1px solid var(--color-secondary);
     }
 

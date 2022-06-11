@@ -16,11 +16,15 @@
 	import Input from '$lib/components/Input.svelte';
 	import { debounceTime } from '$lib/utils/debounce-time';
 	import { confirmAction } from '$lib/utils/confirm-action';
+	import AddRound from '$lib/views/project-parts/AddRound.svelte';
+	import { slide } from 'svelte/transition';
 
 	let loading = true;
 	let part: Observable<ProjectPart>;
 	let rounds: Observable<Rounds>;
 	let mounted = false;
+	let editRoundId: number;
+	let editMode = false;
 
 	const handleNameChange = ({ target }) => db.projectParts.update($part.id, { name: target.value });
 	const handleUp = async (roundId: number) => {
@@ -61,20 +65,27 @@
 		));
 	};
 	const handleRemoveClick = () => db.projectParts.delete($part.id);
-	const handleAddRound = async () => {
-		await db.transaction('rw', db.projectParts, db.rounds, async () => {
+	const handleAddRound = async (index: number) => {
+		editRoundId = await db.transaction('rw', db.projectParts, db.rounds, async () => {
 			const roundId = await db.rounds.add({
 				name: 'new',
 				checkboxAmount: 1,
 				state: 0,
 			});
-			return db.projectParts.update($part.id, {roundIds: [...$part.roundIds, roundId]})
+			await db.projectParts.update($part.id, {
+				roundIds: [
+					...$part.roundIds.filter((_, i) => i < index),
+					roundId,
+					...$part.roundIds.filter((_, i) => i >= index),
+				]
+			});
+			return roundId;
 		});
-	}
+	};
 	const handleRemoveRound = (id: number) => db.transaction('rw', db.projectParts, db.rounds, async () => {
-			await db.rounds.delete(id);
-			return db.projectParts.update($part.id, {roundIds: $part.roundIds.filter(i => i !== id)})
-		});
+		await db.rounds.delete(id);
+		return db.projectParts.update($part.id, { roundIds: $part.roundIds.filter(i => i !== id) });
+	});
 
 	onMount(() => {
 		mounted = true;
@@ -91,21 +102,37 @@
 					.then(rounds => rounds ? rounds.filter(r => !!r) : undefined)
 					.then(tap<Rounds>(() => loading = false))
 			);
+
+			editMode = editMode || ($rounds && !$rounds.length);
 		}
 	}
 </script>
 {#if loading}
 	loading...
 {:else if $rounds}
+	{#if editMode}
+		<div transition:slide|local>
+			<AddRound on:click={() => handleAddRound(0)} />
+		</div>
+	{/if}
 	{#if $rounds.length}
 		{#each $rounds as round, i}
 			<Round {round}
 						 isFirst={i === 0}
 						 isLast={i === $rounds.length - 1}
+						 editMode={editMode}
+						 focusThis={editRoundId === round.id}
 						 on:up={() => handleUp(round.id)}
 						 on:down={() => handleDown(round.id)}
+						 on:edit={() => editRoundId = round.id}
+						 on:endEdit={() => editRoundId = undefined}
 						 on:remove={confirmAction(`Do you really want to delete ${round.name}?`, () => handleRemoveRound(round.id))}
 			/>
+			{#if editMode}
+				<div transition:slide|local>
+					<AddRound on:click={() => handleAddRound(i + 1)} />
+				</div>
+			{/if}
 		{/each}
 	{:else}
 		<div class="opacity-60 text-center py-4">
@@ -113,12 +140,12 @@
 		</div>
 	{/if}
 
-	<div class="border-t cursor-pointer mt-2 opacity-60 hover:opacity-100 transition-opacity" on:click={handleAddRound}>
-		<div class="absolute inset-0 opacity-50">
-			<Round />
-		</div>
+	<div class="border-t cursor-pointer mt-2 opacity-60 hover:opacity-100 transition-opacity"
+			 class:opacity-60={!editMode}
+			 class:text-primary={editMode}
+			 on:click={() => editMode = !editMode}>
 		<div class="text-center py-px leading-10">
-			add round
+			{editMode ? 'save' : 'edit'}
 		</div>
 	</div>
 

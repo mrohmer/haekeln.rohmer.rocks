@@ -6,7 +6,7 @@
     @apply relative box-border;
 }
 
-input {
+input, [contenteditable="true"] {
     @apply bg-transparent outline-0;
 }
 
