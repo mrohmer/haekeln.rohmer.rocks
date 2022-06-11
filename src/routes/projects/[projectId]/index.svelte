@@ -16,6 +16,7 @@
 	import { confirmAction } from '$lib/utils/confirm-action';
 
 	let project: Observable<Project>;
+	let name: string;
 
 	const handleNameChange = ({ target }) => db.projects.update($project.id, { name: target.value });
 	const handleResetClick = async () => {
@@ -51,10 +52,12 @@
 			() => db.projects.get(Number($page.params.projectId))
 		);
 	});
+
+	$: name = $project?.name;
 </script>
 
 {#if $project?.name}
-	<Input value={$project.name} on:input={debounceTime(handleNameChange, 500)}>
+	<Input value={name} on:input={debounceTime(handleNameChange, 500)}>
 		Name
 	</Input>
 

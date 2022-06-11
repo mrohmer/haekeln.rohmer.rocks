@@ -95,6 +95,8 @@
 		mounted = true;
 	});
 
+	let name: string;
+
 	$: {
 		if (mounted) {
 			part = liveQuery(
@@ -110,6 +112,7 @@
 			editMode = editMode || ($rounds && !$rounds.length);
 		}
 	}
+	$: name = $part?.name;
 </script>
 {#if loading}
 	loading...
@@ -157,7 +160,7 @@
 
 
 	<div class="mt-20 mb-2">
-		<Input value={$part.name} on:input={debounceTime(handleNameChange, 500)}>
+		<Input value={name} on:input={debounceTime(handleNameChange, 500)}>
 			Name
 		</Input>
 		<div class="sm:flex">
