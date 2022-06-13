@@ -15,12 +15,13 @@
 	let loading = true;
 
 	const migrate = async () => {
-		const localStorageValue = JSON.parse(localStorage.getItem('maschenzaehler') ?? '');
+		const localStorageValue = localStorage.getItem('maschenzaehler');
 		if (localStorageValue) {
-			await db.transaction('rw', db.projects, db.projectParts, db.rounds, () => migrateFromLocalStorage(localStorageValue));
+			const parsed = JSON.parse(localStorageValue);
+			await db.transaction('rw', db.projects, db.projectParts, db.rounds, () => migrateFromLocalStorage(parsed));
 
 			localStorage.removeItem('maschenzaehler');
-			localStorage.setItem('_maschenzaehler', JSON.stringify(localStorageValue));
+			localStorage.setItem('_maschenzaehler', localStorageValue);
 		}
 	};
 
