@@ -18,7 +18,15 @@
 	let project: Observable<Project>;
 	let name: string;
 
-	const handleNameChange = ({ target }) => db.projects.update($project.id, { name: target.value });
+	const handleNameChange = async ({ target }) => {
+		const name = target.value;
+
+		if (!name) {
+			return;
+		}
+
+		await db.projects.update($project.id, { name });
+	}
 	const handleResetClick = async () => {
 		const parts = await db.projectParts.where({ projectId: $page.params.projectId }).toArray();
 
@@ -56,7 +64,7 @@
 	$: name = $project?.name;
 </script>
 
-{#if $project?.name}
+{#if $project}
 	<Input value={name} on:input={debounceTime(handleNameChange, 500)}>
 		Name
 	</Input>

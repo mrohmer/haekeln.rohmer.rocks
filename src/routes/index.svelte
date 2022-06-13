@@ -60,7 +60,11 @@
 				<a href="/projects/{project.id}"
 					 class="p-4 border-b border-gray-200 dark:border-gray-700"
 				>
-					{project.name}
+					{#if project.name}
+						{project.name}
+					{:else}
+						<span class="opacity-10">(no name)</span>
+					{/if}
 				</a>
 			{/each}
 		{:else}

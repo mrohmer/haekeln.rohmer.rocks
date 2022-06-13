@@ -32,7 +32,7 @@
 </script>
 {#if loading}
 	loading...
-{:else if $project?.name }
+{:else if $project }
 	<nav class="flex py-2 fixed bg-white dark:bg-zinc-900 z-50 inset-x-0 top-0 w-screen">
 		<div class="align-middle py-0.5 px-2 border-b-2 border-transparent">
 			<a href="/"><Icon icon={homeIcon}/></a>
