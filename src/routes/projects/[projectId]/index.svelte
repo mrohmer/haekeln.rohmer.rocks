@@ -19,7 +19,7 @@
 	let name: string;
 
 	const handleNameChange = async ({ target }) => {
-		const name = target.value;
+		const name = target.value?.trim();
 
 		if (!name) {
 			return;

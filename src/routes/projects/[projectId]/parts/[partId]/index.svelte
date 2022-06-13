@@ -27,7 +27,13 @@
 	let editRoundId: number;
 	let editMode = false;
 
-	const handleNameChange = ({ target }) => db.projectParts.update($part.id, { name: target.value });
+	const handleNameChange = async ({ target }) => {
+		const name = target.value?.trim();
+		if (!name) {
+			return;
+		}
+		await db.projectParts.update($part.id, { name });
+	}
 	const handleUp = async (roundId: number) => {
 		const roundIds = $rounds.filter(i => !!i).map(item => item.id).map((item, index, array) => {
 			if (array[index + 1] === roundId) {

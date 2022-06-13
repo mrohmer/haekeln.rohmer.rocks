@@ -33,8 +33,15 @@
 			await db.rounds.update(round.id, { state: round.state + shift });
 		}
 	};
-	const handleNameChange = ({ target }) =>
-		db.rounds.update(round.id, { name: target.textContent });
+	const handleNameChange = async ({ target }) => {
+		const name = target.textContent?.trim();
+
+		if (!name) {
+			return;
+		}
+
+		await db.rounds.update(round.id, { name });
+	}
 	const handleCheckboxAmountChange = async (shift: number) => {
 		const checkboxAmount = Math.max(round.checkboxAmount + shift, 1);
 		if (round.checkboxAmount !== checkboxAmount) {
