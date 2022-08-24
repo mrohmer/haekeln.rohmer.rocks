@@ -101,7 +101,7 @@
 	</div>
 
 	{#if editMode}
-		<button on:click={() => !isFirst && dispatch('up')}
+		<button on:click|preventDefault={() => !isFirst && dispatch('up')}
 						class="px-1 mr-px opacity-60 hover:opacity-100 transition-opacity"
 						class:disabled={isFirst || !round}
 						disabled={!round}
@@ -109,7 +109,7 @@
 		>
 			<Icon icon={upIcon} />
 		</button>
-		<button on:click={() => !isLast && dispatch('down')}
+		<button on:click|preventDefault={() => !isLast && dispatch('down')}
 						class="px-1 mr-px opacity-60 hover:opacity-100 transition-opacity"
 						class:disabled={isLast || !round}
 						disabled={!round}
