@@ -6,7 +6,7 @@
     @apply relative box-border;
 }
 
-input, [contenteditable="true"] {
+input, [contenteditable="true"], textarea {
     @apply bg-transparent outline-none focus:outline-none;
 }
 

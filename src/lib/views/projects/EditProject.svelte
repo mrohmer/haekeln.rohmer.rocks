@@ -49,4 +49,9 @@
 	</Input>
 
 	<Button type="submit">{buttonText}</Button>
+
+	{#if $$slots.default}
+		<hr class="mt-5 mb-6 border-gray-200 dark:border-gray-700"/>
+		<slot />
+	{/if}
 </form>

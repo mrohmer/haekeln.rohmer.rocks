@@ -5,6 +5,7 @@
 	import { onMount } from 'svelte';
 	import { generateName } from '$lib/utils/generate-name';
 	import type { Project } from '$lib/models/project';
+	import Button from '$lib/components/Button.svelte';
 
 	let project: Project;
 
@@ -21,4 +22,10 @@
 	})
 </script>
 
-<EditProject {project} on:submit={handleSubmit} />
+<EditProject {project} on:submit={handleSubmit}>
+
+	<a href="/projects/import">
+		<Button>import</Button>
+	</a>
+
+</EditProject>

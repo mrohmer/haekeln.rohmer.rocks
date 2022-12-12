@@ -70,14 +70,17 @@
 	</Input>
 
 	<div class="sm:flex py-2">
-		<Button href="./{$project.id}/duplicate">
-			duplicate project
-		</Button>
 		<Button on:click={confirmAction(`Do you really want to reset all parts in ${$project.name}?`, handleResetClick)}>
 			reset project
 		</Button>
+		<Button href="./{$project.id}/export">
+			export project
+		</Button>
+		<Button href="./{$project.id}/duplicate">
+			duplicate project
+		</Button>
 		<Button on:click={confirmAction(`Do you really want to delete ${$project.name}?`, handleRemoveClick)}>
-			remove project
+			delete project
 		</Button>
 	</div>
 {/if}
