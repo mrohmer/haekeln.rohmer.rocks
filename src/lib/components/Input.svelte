@@ -1,9 +1,9 @@
 <script lang="ts">
 	import ClipboardJS from 'clipboard';
-	import { browser } from '$app/env';
 	import { onDestroy } from 'svelte';
 	import Icon from './Icon.svelte';
 	import { faCopy as copyIcon } from '@fortawesome/free-solid-svg-icons/faCopy.js';
+	import { browser } from '$app/environment';
 
 	export let value: any;
 	export let id = `id${(Math.random() * 1000).toFixed(0)}`;

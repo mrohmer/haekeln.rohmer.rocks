@@ -1,7 +1,3 @@
-<script context="module" lang="ts">
-	export const prerender = true;
-</script>
-
 <script lang="ts">
 	import EditProject from '$lib/views/projects/EditProject.svelte';
 	import { db } from '$lib/db';

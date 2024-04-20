@@ -1,7 +1,7 @@
 import type { Project } from '$lib/models/project';
 import type { ProjectPart } from '$lib/models/project-part';
 import type { Rounds } from '$lib/models/round';
-import { compressToBase64, decompressFromBase64 } from 'lz-string';
+import * as lzString from 'lz-string';
 import { parse, stringify } from 'devalue';
 
 export type ProjectExportData = Project & Record<'parts', (ProjectPart & Record<'rounds', Rounds>)[]>;
@@ -15,13 +15,13 @@ const cleanProjectExportData = (data: ProjectExportData) => ({
 		}))
 	}))
 });
-const encodeV1 = (str: Record<any, any>, prefix: string) => `v1.${prefix}.${compressToBase64(stringify(str))}`;
+const encodeV1 = (str: Record<any, any>, prefix: string) => `v1.${prefix}.${lzString.compressToBase64(stringify(str))}`;
 export const projectToExportData = (data: ProjectExportData): string => encodeV1(cleanProjectExportData(data), 'proj');
 export const workspaceToExportData = (data: ProjectExportData[]): string => encodeV1(data.map(cleanProjectExportData), 'wsp');
 
 const isV1 = (str: string, prefix: string) => str?.trim().startsWith(`v1.${prefix}.`);
 const decodeV1 = (str: string, prefix: string) =>
-	parse(decompressFromBase64(str.replace(`v1.${prefix}.`, '')));
+	parse(lzString.decompressFromBase64(str.replace(`v1.${prefix}.`, '')));
 export const exportDataToProject = (str: string): ProjectExportData => {
 	str = str?.trim();
 	if (isV1(str, 'proj')) {

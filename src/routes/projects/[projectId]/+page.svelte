@@ -1,7 +1,3 @@
-<script context="module" lang="ts">
-	export const prerender = true;
-</script>
-
 <script lang="ts">
 	import { db } from '$lib/db';
 	import { onMount } from 'svelte';
