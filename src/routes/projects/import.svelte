@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Input from '$lib/components/Input.svelte';
-	import type { ProjectExportData } from '$lib/utils/export.js';
-	import { exportDataToProject, exportDataToWorkspace, isValid, isWorkspace } from '$lib/utils/export.js';
+	import type { ProjectExportData } from '$lib/utils/export';
+	import { exportDataToProject, exportDataToWorkspace, isValid, isWorkspace } from '$lib/utils/export';
 	import Button from '$lib/components/Button.svelte';
 	import InputError from '$lib/components/InputError.svelte';
 	import { db } from '$lib/db';
